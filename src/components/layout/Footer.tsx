@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FC } from 'react';
+import React from 'react';
 import { Input } from '@/components/ui/input'; 
 import { Button } from '@/components/ui/button'; 
 
@@ -9,24 +9,26 @@ interface FooterSectionProps {
   titleClass?: string;
 }
 
-const FooterSection: FC<FooterSectionProps> = ({ title, links, titleClass = 'text-primary-foreground' }) => (
-  <div>
-    <h4 className={`text-lg font-semibold mb-4 ${titleClass}`}>
-      {title}
-    </h4>
-    <ul className="space-y-2 text-sm text-muted-foreground">
-      {links.map((link) => (
-        <li key={link.name}>
-          <Link href={link.href} className="hover:text-primary">
-            {link.name}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+function FooterSection({ title, links, titleClass = 'text-primary-foreground' }: FooterSectionProps): React.ReactElement {
+  return (
+    <div>
+      <h4 className={`text-lg font-semibold mb-4 ${titleClass}`}>
+        {title}
+      </h4>
+      <ul className="space-y-2 text-sm text-muted-foreground">
+        {links.map((link) => (
+          <li key={link.name}>
+            <Link href={link.href} className="hover:text-primary">
+              {link.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
-export default function Footer(): JSX.Element {
+export function Footer(): React.ReactElement {
   return (
     <footer className="bg-card-foreground mt-12 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
@@ -64,7 +66,7 @@ export default function Footer(): JSX.Element {
           />
 
           {/* Nyhetsbrev */}
-          <div className="text-left">
+          <div>
             <h4 className="text-lg font-semibold mb-4 text-secondary">
               Håll dig uppdaterad
             </h4>
@@ -75,11 +77,11 @@ export default function Footer(): JSX.Element {
             <Input 
               type="email" 
               placeholder="Din e-post" 
-              className="w-full p-2 bg-muted text-muted-foreground border border-border"
+              className="w-full"
             />
            
             <Button 
-              className="mt-2 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 rounded-md transition duration-150"
+              className="mt-2 w-full"
             >
               Anmäl
             </Button>

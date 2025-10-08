@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LinkButton from '../Buttons/LinkButton';
@@ -16,7 +16,7 @@ const navigation = [
   { name: 'Väder', href: '#' },
 ];
 
-export default function Navbar(): JSX.Element {
+export function Navbar(): React.ReactElement {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -86,7 +86,7 @@ export default function Navbar(): JSX.Element {
                 key={item.name}
                 href={item.href}
                 variant="nav"
-                className="block w-full text-left px-3 py-2 rounded-md"
+                className="block w-full text-left"
               >
                 {item.name}
               </LinkButton>
@@ -104,4 +104,4 @@ export default function Navbar(): JSX.Element {
       </div>
     </header>
   );
-};
+}
