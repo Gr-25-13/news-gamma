@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -57,7 +58,21 @@ export function Footer(): React.ReactElement {
   return (
     <footer className="bg-background text-foreground mt-12 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+          {/* Logga längst till vänster */}
+          <div className="flex items-start">
+            <Link href="/" className="flex items-center space-x-3">
+              <div className="relative h-12 w-12">
+                <Image
+                  src="/loggo.png"
+                  alt="Dagens Dos Logga"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </Link>
+          </div>
+ 
           {/* Om Oss */}
           <div>
             <h4 className={`text-lg font-semibold mb-4 text-primary`}>
@@ -67,7 +82,7 @@ export function Footer(): React.ReactElement {
               Vår mission är att leverera nyheter så att du kan känna dig minimalt informerad.
             </p>
           </div>
-
+ 
           {/* Dynamiska sektioner */}
           {footerSections.map((section) => (
             <FooterSection
@@ -77,7 +92,7 @@ export function Footer(): React.ReactElement {
               variant={section.variant}
             />
           ))}
-
+ 
           {/* Nyhetsbrev */}
           <div>
             <h4 className={`text-lg font-semibold mb-4 text-secondary`}>
@@ -86,22 +101,22 @@ export function Footer(): React.ReactElement {
             <p className="text-sm text-muted-foreground mb-3">
               Få vårt personaliserade nyhetsbrev (endast för betalande kunder).
             </p>
-
+ 
             <Input type="email" placeholder="Din e-post" className="w-full" />
-
+ 
             <Button variant="default" className="mt-2 w-full">
               Anmäl
             </Button>
           </div>
         </div>
-
-        {/* Copyright */}
-        <div className="mt-10 pt-6 border-t border-muted-foreground/30 text-center">
-          <p className="text-sm text-muted-foreground">
-            &copy; 2025 Dagens Dos. Alla rättigheter reserverade. Utvecklat av Josefine, Johan, Ahamed och Magui och en stor dos sarkasm.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
+ 
+         {/* Copyright */}
+         <div className="mt-10 pt-6 border-t border-muted-foreground/30 text-center">
+           <p className="text-sm text-muted-foreground">
+             &copy; 2025 Dagens Dos. Alla rättigheter reserverade. Utvecklat av Josefine, Johan, Ahamed och Magui och en stor dos sarkasm.
+           </p>
+         </div>
+       </div>
+     </footer>
+   );
 }

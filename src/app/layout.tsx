@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css"; 
+import { Providers } from "@/components/theme-provider";
 
 // GOOGLE FONT ROBOTO - Lättläst
 const roboto = Roboto({
@@ -21,8 +22,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sv" className={roboto.className}>
+      <head>
+        <script
+          // Sätter html.dark tidigt för att undvika hydration-mismatch
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+  try {
+    var t = localStorage.getItem('theme');
+    if(!t){
+      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if(t === 'dark') document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }catch(e){}
+})();`,
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-gray-50 text-gray-800 antialiased">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

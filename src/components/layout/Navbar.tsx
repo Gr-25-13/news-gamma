@@ -27,9 +27,9 @@ export function Navbar(): React.ReactElement {
           
           {/* Logo och Titel-sektion */}
           <Link href="/" className="flex justify-start lg:w-0 lg:flex-1 items-center space-x-3">
-            <div className="relative h-10 w-10">
+            <div className="relative h-18 w-18">
               <Image
-                src="/loggo.jpg"
+                src="/loggo.png"
                 alt="Dagens Dos Logga"
                 fill
                 className="object-contain"
