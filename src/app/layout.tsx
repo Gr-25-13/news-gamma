@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import "./globals.css"; 
+import "./globals.css";
 import { Providers } from "@/components/theme-provider";
 
-// GOOGLE FONT ROBOTO - Lättläst
 const roboto = Roboto({
-  weight: ["300", "400", "700", "900"], 
+  weight: ["300", "400", "700", "900"],
   subsets: ["latin"],
-  variable: '--font-roboto', 
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -17,12 +16,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="sv" className={roboto.className}>
-      <body className="min-h-screen flex flex-col bg-gray-50 text-gray-800 antialiased">
+    <html
+      lang="sv"
+      className={roboto.className}
+      suppressHydrationWarning
+    >
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>
