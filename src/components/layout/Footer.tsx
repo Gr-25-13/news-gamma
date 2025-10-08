@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { FC } from 'react';
-import { Input } from '@/components/ui/input'; // Antar shadcn/ui Input
-import { Button } from '@/components/ui/button'; // Antar shadcn/ui Button
+import { Input } from '@/components/ui/input'; 
+import { Button } from '@/components/ui/button'; 
 
 interface FooterSectionProps {
   title: string;
@@ -17,7 +17,7 @@ const FooterSection: FC<FooterSectionProps> = ({ title, links, titleClass = 'tex
     <ul className="space-y-2 text-sm text-muted-foreground">
       {links.map((link) => (
         <li key={link.name}>
-          <Link href={link.href} className="hover:text-white">
+          <Link href={link.href} className="hover:text-primary">
             {link.name}
           </Link>
         </li>
@@ -28,8 +28,8 @@ const FooterSection: FC<FooterSectionProps> = ({ title, links, titleClass = 'tex
 
 export default function Footer(): JSX.Element {
   return (
-    <footer className="bg-card-foreground mt-12 py-10"> {/* card-foreground är mörk (som bg-gray-800) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+    <footer className="bg-card-foreground mt-12 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           
           {/*  Om Oss */}
@@ -75,7 +75,7 @@ export default function Footer(): JSX.Element {
             <Input 
               type="email" 
               placeholder="Din e-post" 
-              className="w-full p-2 bg-gray-700 text-white border border-gray-600"
+              className="w-full p-2 bg-muted text-muted-foreground border border-border"
             />
            
             <Button 
