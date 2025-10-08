@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LinkButton from '../Buttons/LinkButton';
+import { ModeToggle } from '../Buttons/toggle-theme-button';
 
 const navigation = [
   { name: 'Senaste', href: '#' },
@@ -45,6 +46,8 @@ export function Navbar(): React.ReactElement {
             </div>
           </Link>
 
+   
+
           {/* Huvudnavigering (Desktop) */}
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item) => (
@@ -53,6 +56,8 @@ export function Navbar(): React.ReactElement {
               </LinkButton>
             ))}
           </nav>
+
+        
 
           {/* Autentisering och Prenumeration (Desktop) */}
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
@@ -63,7 +68,8 @@ export function Navbar(): React.ReactElement {
               Prenumerera
             </LinkButton>
           </div>
-
+   {/* THEME BUTTON */}
+          <ModeToggle />
           {/* Mobil menyknapp */}
           <div className="md:hidden">
             {/* Använd komponentens variant/size istället för att overridea färger */}
