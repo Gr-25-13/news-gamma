@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { Menu } from 'lucide-react'; 
-import { Button } from '@/components/ui/button'; 
+import { Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import LinkButton from '../Buttons/LinkButton';
 
 const navigation = [
@@ -28,7 +28,7 @@ export default function Navbar(): JSX.Element {
           <Link href="/" className="flex justify-start lg:w-0 lg:flex-1 items-center space-x-3">
             <div className="relative h-10 w-10">
               <Image
-                src="/loggo.jpg" 
+                src="/loggo.jpg"
                 alt="Dagens Dos Logga"
                 fill
                 className="object-contain"
@@ -66,11 +66,11 @@ export default function Navbar(): JSX.Element {
 
           {/* Mobil menyknapp */}
           <div className="md:hidden">
-            <Button 
-              variant="outline" 
+            {/* Använd komponentens variant/size istället för att overridea färger */}
+            <Button
+              variant="outline"
               size="icon"
               onClick={() => setIsOpen(!isOpen)}
-              className="bg-muted p-2 text-muted-foreground hover:bg-muted/50"
               aria-label="Öppna huvudmeny"
             >
               <Menu className="h-6 w-6" aria-hidden="true" />
@@ -82,12 +82,17 @@ export default function Navbar(): JSX.Element {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2">
             {navigation.map((item) => (
-              <Link key={item.name} href={item.href} className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:text-primary hover:bg-muted">
+              <LinkButton
+                key={item.name}
+                href={item.href}
+                variant="nav"
+                className="block w-full text-left px-3 py-2 rounded-md"
+              >
                 {item.name}
-              </Link>
+              </LinkButton>
             ))}
-            <div className="pt-2 border-t border-border space-y-2">
-              <LinkButton href="#" variant="login" className="block w-full text-left !mr-0">
+            <div className="pt-2 border-t space-y-2">
+              <LinkButton href="#" variant="login" className="block w-full text-left">
                 Logga in
               </LinkButton>
               <LinkButton href="#" variant="primary" className="block w-full text-center">
