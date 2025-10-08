@@ -1,4 +1,3 @@
-import Link from 'next/link';
 // Image import removed because it's not used (logo was commented out)
 import React from 'react';
 import { Input } from '@/components/ui/input';
@@ -22,9 +21,9 @@ function FooterSection({ title, links, variant = 'primary' }: FooterSectionProps
       <ul className="space-y-2 text-sm text-muted-foreground">
         {links.map((link) => (
           <li key={link.name}>
-            <Link href={link.href} className="hover:text-primary">
+            <a href={link.href} className="hover:text-primary">
               {link.name}
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
@@ -32,24 +31,23 @@ function FooterSection({ title, links, variant = 'primary' }: FooterSectionProps
   );
 }
 
-const footerSections = [
+const footerSections: { title: string; variant?: FooterVariant; links: { name: string; href: string }[] }[] = [
   {
     title: 'Sidor',
     variant: 'primary' as FooterVariant,
     links: [
       { name: 'Hem', href: '#' },
-      { name: 'Registrera', href: '#' },
-      { name: 'Min Sida', href: '#' },
-     
+      { name: 'Prenumerera', href: '/subscribe' },
+      { name: 'Om oss', href: '/om-oss' },
     ],
   },
   {
     title: 'Juridiskt',
     variant: 'muted' as FooterVariant,
     links: [
-      { name: 'Prenumerationsvillkor', href: '#' },
-      { name: 'Integritet & Cookies', href: '#' },
-      { name: 'Kontakta Oss', href: '#' },
+  { name: 'Prenumerationsvillkor', href: '/prenumerationsvillkor' },
+  { name: 'Integritet & Cookies', href: '/integritet-cookies' },
+  { name: 'Kontakta Oss', href: '/kontakta-oss' },
     ],
   },
 ];
