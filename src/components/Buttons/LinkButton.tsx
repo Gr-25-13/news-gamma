@@ -15,7 +15,7 @@ interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> 
   variant?: Variant;
 }
 
-export default function LinkButton({ href, children, variant = 'nav', className = '', ...rest }: LinkButtonProps): JSX.Element {
+export default function LinkButton({ href, children, variant = 'nav', className = '', ...rest }: LinkButtonProps): React.ReactElement {
   const classes = `${variantClasses[variant]} ${className}`.trim();
   return (
     <Link href={href} className={classes} {...rest}>

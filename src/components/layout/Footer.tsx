@@ -60,7 +60,7 @@ export function Footer(): React.ReactElement {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Logga längst till vänster */}
-          <div className="flex items-start">
+          {/* <div className="flex items-start">
             <Link href="/" className="flex items-center space-x-3">
               <div className="relative h-12 w-12">
                 <Image
@@ -71,7 +71,7 @@ export function Footer(): React.ReactElement {
                 />
               </div>
             </Link>
-          </div>
+          </div> */}
  
           {/* Om Oss */}
           <div>
