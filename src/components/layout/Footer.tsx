@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
+// Image import removed because it's not used (logo was commented out)
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';

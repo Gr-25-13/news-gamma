@@ -48,7 +48,9 @@ export default function SubscribePage(): React.ReactElement {
                           <li key={f}>• {f}</li>
                         ))}
                       </ul>
-                      <Button variant="default" className="w-full">Välj {plan.name}</Button>
+                      <Button asChild variant="default" className="w-full">
+                        <Link href={`/subscribe/checkout?plan=${plan.id}`}>Välj {plan.name}</Link>
+                      </Button>
                     </div>
                   ))}
                 </div>
