@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import LinkButton from '../Buttons/LinkButton';
 import { ModeToggle } from '../Buttons/toggle-theme-button';
 
-const navigation = [
+const navigation: { name: string; href: string }[] = [
   { name: 'Senaste', href: '#' },
   { name: 'Inrikes', href: '#' },
   { name: 'Världen', href: '#' },
@@ -18,7 +18,7 @@ const navigation = [
 ];
 
 export function Navbar(): React.ReactElement {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <header className="bg-card shadow-md sticky top-0 z-50">
@@ -60,16 +60,20 @@ export function Navbar(): React.ReactElement {
         
 
           {/* Autentisering och Prenumeration (Desktop) */}
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <LinkButton href="#" variant="login">
-              Logga in
-            </LinkButton>
-            <LinkButton href="#" variant="primary" className="ml-4">
-              Prenumerera
-            </LinkButton>
+          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-3">
+            {/* Logga in - outline/ghost */}
+            <Button asChild variant="outline" size="default">
+              <Link href="#">Logga in</Link>
+            </Button>
+
+            {/* Prenumerera - primary */}
+            <Button asChild variant="default" size="default">
+              <Link href="#">Prenumerera</Link>
+            </Button>
+
+            {/* Theme toggle (desktop) */}
+            <ModeToggle />
           </div>
-   {/* THEME BUTTON */}
-          <ModeToggle />
           {/* Mobil menyknapp */}
           <div className="md:hidden">
             {/* Använd komponentens variant/size istället för att overridea färger */}
@@ -98,12 +102,17 @@ export function Navbar(): React.ReactElement {
               </LinkButton>
             ))}
             <div className="pt-2 border-t space-y-2">
-              <LinkButton href="#" variant="login" className="block w-full text-left">
-                Logga in
-              </LinkButton>
-              <LinkButton href="#" variant="primary" className="block w-full text-center">
-                Prenumerera
-              </LinkButton>
+              <div className="space-y-2 px-2">
+                <Button asChild variant="outline" className="w-full">
+                  <Link href="#">Logga in</Link>
+                </Button>
+                <Button asChild variant="default" className="w-full">
+                  <Link href="#">Prenumerera</Link>
+                </Button>
+                <div className="pt-2">
+                  <ModeToggle />
+                </div>
+              </div>
             </div>
           </div>
         )}
