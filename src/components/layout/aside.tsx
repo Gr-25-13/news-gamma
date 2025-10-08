@@ -83,7 +83,7 @@ export function Aside({
           {onSubscribeClick ? (
             <span>Prenumerera Nu →</span>
           ) : (
-            <Link href="#">Prenumerera Nu →</Link>
+            <Link href="/subscribe">Prenumerera Nu →</Link>
           )}
         </Button>
       </section>
