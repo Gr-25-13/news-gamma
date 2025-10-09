@@ -39,7 +39,7 @@ const footerSections: { title: string; variant?: FooterVariant; links: { name: s
     variant: 'primary' as FooterVariant,
     links: [
       { name: 'Hem', href: '#' },
-      { name: 'Prenumerera', href: '/hantera-prenumeration' },
+      { name: 'Prenumerera', href: '/prenumeration' },
       { name: 'Om oss', href: '/om-oss' },
     ],
   },
@@ -47,9 +47,9 @@ const footerSections: { title: string; variant?: FooterVariant; links: { name: s
     title: 'Juridiskt',
     variant: 'muted' as FooterVariant,
     links: [
-  { name: 'Prenumerationsvillkor', href: '/prenumerationsvillkor' },
-  { name: 'Integritet & Cookies', href: '/integritet-cookies' },
-  { name: 'Kontakta Oss', href: '/kontakta-oss' },
+      { name: 'Prenumerationsvillkor', href: '/prenumerationsvillkor' },
+      { name: 'Integritet & Cookies', href: '/integritet-cookies' },
+      { name: 'Kontakta Oss', href: '/kontakta-oss' },
     ],
   },
 ];

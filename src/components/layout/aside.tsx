@@ -85,7 +85,7 @@ export function Aside({
           {onSubscribeClick ? (
             <span>Prenumerera Nu →</span>
           ) : (
-            <Link href="/hantera-prenumeration">Prenumerera Nu →</Link>
+            <Link href="/prenumeration">Prenumerera Nu →</Link>
           )}
         </Button>
       </section>
