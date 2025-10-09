@@ -83,8 +83,8 @@ export function Navbar(): React.ReactElement {
 												<>
 													<Link href="/logga-in" className="whitespace-nowrap text-base font-medium text-foreground hover:text-primary">Logga in</Link>
 													<Button asChild variant="default">
-														<Link href="/hantera-prenumeration">Prenumerera</Link>
-													</Button>
+															<Link href="/prenumeration">Prenumerera</Link>
+														</Button>
 												</>
 											) : (
 								<>
@@ -133,7 +133,7 @@ export function Navbar(): React.ReactElement {
 																<>
 																	<Link href="/logga-in" className="block text-base font-medium text-foreground hover:text-primary">Logga in</Link>
 																	<Button asChild variant="default">
-																		<Link href="/hantera-prenumeration">Prenumerera</Link>
+																		<Link href="/prenumeration">Prenumerera</Link>
 																	</Button>
 																</>
 															) : (
