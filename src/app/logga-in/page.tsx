@@ -12,8 +12,8 @@ export default function LoginPage(): React.ReactElement {
 
   function handleLogin() {
     // Mock login: set session in-memory or localStorage if desired
-    // For now, redirect to /account
-    router.push('/account');
+  // For now, redirect to /installningar
+  router.push('/installningar');
   }
 
   return (

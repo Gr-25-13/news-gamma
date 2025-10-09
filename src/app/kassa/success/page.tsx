@@ -50,7 +50,7 @@ export default function SuccessPage(): React.ReactElement {
 
                   <div className="mt-4 flex gap-3">
                     <Button asChild variant="default">
-                      <Link href="/account">Gå till Mina sidor</Link>
+                      <Link href="/installningar">Gå till Mina sidor</Link>
                     </Button>
                     <Button asChild variant="outline">
                       <Link href="/">Till startsidan</Link>

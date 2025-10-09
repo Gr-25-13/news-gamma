@@ -120,7 +120,7 @@ export default function CheckoutPage(): React.ReactElement {
                         <div className="text-sm text-muted-foreground">{selectedPlan.price}</div>
                       </div>
                       <div>
-                        <a href="/subscribe" className="text-sm text-primary hover:underline">Byt plan</a>
+                        <a href="/hantera-prenumeration" className="text-sm text-primary hover:underline">Byt plan</a>
                       </div>
                     </div>
                     <ul className="mt-3 text-sm text-muted-foreground space-y-1">
@@ -131,7 +131,7 @@ export default function CheckoutPage(): React.ReactElement {
                   </div>
                 </div>
 
-                <CheckoutForm onSubmit={() => router.push('/subscribe/checkout/success')} />
+                <CheckoutForm onSubmit={() => router.push('/kassa/success')} />
 
               </section>
             </div>

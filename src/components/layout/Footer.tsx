@@ -39,7 +39,7 @@ const footerSections: { title: string; variant?: FooterVariant; links: { name: s
     variant: 'primary' as FooterVariant,
     links: [
       { name: 'Hem', href: '#' },
-      { name: 'Prenumerera', href: '/subscribe' },
+      { name: 'Prenumerera', href: '/hantera-prenumeration' },
       { name: 'Om oss', href: '/om-oss' },
     ],
   },

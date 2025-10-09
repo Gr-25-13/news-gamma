@@ -16,7 +16,7 @@ export function ArticleHero({ article, className = "" }: Props) {
 
       <div className="flex flex-col md:flex-row gap-6">
         <Link
-          href={`/articles/${article.slug}`}
+          href={`/artiklar/${article.slug}`}
           className="md:w-1/2 block rounded-lg overflow-hidden shadow-md"
           aria-label={article.title}
         >
@@ -31,14 +31,14 @@ export function ArticleHero({ article, className = "" }: Props) {
 
         <div className="md:w-1/2">
           <p className="text-sm font-semibold text-primary uppercase">{article.category}</p>
-          <Link href={`/articles/${article.slug}`} className="mt-2 block">
+          <Link href={`/artiklar/${article.slug}`} className="mt-2 block">
             <h3 className="text-3xl font-extrabold text-foreground leading-tight hover:text-primary cursor-pointer">
               {article.title}
             </h3>
           </Link>
           <p className="mt-4 text-muted-foreground line-clamp-4">{article.excerpt}</p>
           <Link
-            href={`/articles/${article.slug}`}
+            href={`/artiklar/${article.slug}`}
             className="mt-4 inline-flex items-center text-primary hover:text-primary/90 font-medium"
           >
             Läs mer &rarr;

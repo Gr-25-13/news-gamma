@@ -18,14 +18,14 @@ export function ArticleCard({ article, compact = false, className = "" }: Props)
         className
       )}
     >
-      <p className="text-xs font-semibold text-accent uppercase">{article.category}</p>
-      <Link href={`/articles/${article.slug}`} className="mt-1 block">
+  <p className="text-xs font-semibold text-accent uppercase">{article.category}</p>
+  <Link href={`/artiklar/${article.slug}`} className="mt-1 block">
         <h4 className="mt-1 text-lg font-bold text-foreground hover:text-accent cursor-pointer line-clamp-2">
           {article.title}
         </h4>
       </Link>
       <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{article.excerpt}</p>
-      <Link href={`/articles/${article.slug}`} className="mt-3 inline-block text-sm text-primary hover:underline">
+      <Link href={`/artiklar/${article.slug}`} className="mt-3 inline-block text-sm text-primary hover:underline">
         Läs mer
       </Link>
     </article>

@@ -81,9 +81,9 @@ export function Navbar(): React.ReactElement {
 						<div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-3">
 											{!isAuthenticated ? (
 												<>
-													<Link href="/login" className="whitespace-nowrap text-base font-medium text-foreground hover:text-primary">Logga in</Link>
+													<Link href="/logga-in" className="whitespace-nowrap text-base font-medium text-foreground hover:text-primary">Logga in</Link>
 													<Button asChild variant="default">
-														<Link href="/subscribe">Prenumerera</Link>
+														<Link href="/hantera-prenumeration">Prenumerera</Link>
 													</Button>
 												</>
 											) : (
@@ -94,10 +94,10 @@ export function Navbar(): React.ReactElement {
 										</DropdownMenuTrigger>
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem asChild>
-												<Link href="/account">Inställningar</Link>
+												<Link href="/installningar">Inställningar</Link>
 											</DropdownMenuItem>
 											<DropdownMenuItem asChild>
-												<Link href="/subscribe">Hantera prenumeration</Link>
+												<Link href="/hantera-prenumeration">Hantera prenumeration</Link>
 											</DropdownMenuItem>
 											<DropdownMenuSeparator />
 											<DropdownMenuItem onClick={handleLogout}>Logga ut</DropdownMenuItem>
@@ -131,14 +131,14 @@ export function Navbar(): React.ReactElement {
 									<div className="pt-2 border-t border-muted-foreground/20 flex flex-col gap-2">
 															{!isAuthenticated ? (
 																<>
-																	<Link href="/login" className="block text-base font-medium text-foreground hover:text-primary">Logga in</Link>
+																	<Link href="/logga-in" className="block text-base font-medium text-foreground hover:text-primary">Logga in</Link>
 																	<Button asChild variant="default">
-																		<Link href="/subscribe">Prenumerera</Link>
+																		<Link href="/hantera-prenumeration">Prenumerera</Link>
 																	</Button>
 																</>
 															) : (
 											<>
-												<Link href="/account" className="block text-base font-medium text-foreground hover:text-primary">Mina sidor</Link>
+																	<Link href="/installningar" className="block text-base font-medium text-foreground hover:text-primary">Mina sidor</Link>
 												<button onClick={handleLogout} className="block text-base font-medium text-foreground hover:text-primary">Logga ut</button>
 											</>
 										)}
