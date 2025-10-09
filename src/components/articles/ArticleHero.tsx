@@ -21,7 +21,7 @@ export function ArticleHero({ article, className = "" }: Props) {
           aria-label={article.title}
         >
           <Image
-            src={article.image || "/placeholder.jpg"}
+            src={article.image || "/placeholder.svg"}
             alt={article.title}
             width={800}
             height={500}

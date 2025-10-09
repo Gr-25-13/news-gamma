@@ -1,3 +1,5 @@
+"use client"
+
 // Image import removed because it's not used (logo was commented out)
 import React from 'react';
 import { Input } from '@/components/ui/input';

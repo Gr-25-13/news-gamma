@@ -67,7 +67,7 @@ Ok, vad gör man då? Här är några överlevnadsstrategier som inte involverar
 
 Avslutningsvis: om din ekonomi känns som en tragedi i tre akter, tänk på att dramaturgin är åtminstone underhållande. Du kan inte alltid kontrollera marknaderna, men du kan kontrollera dina vanor. Och om allt annat misslyckas — skratta åt det. Sarkasm är gratis, och det hjälper faktiskt mot ångest. Om inte annat, är det billigare än en fin klocka du aldrig hade råd med från början.`,
     category: 'Ekonomi',
-    image: '/placeholder.jpg',
+      image: '/placeholder.svg',
     date: '2025-10-07',
   },
   {
@@ -89,7 +89,7 @@ Samtidigt finns en humoristisk tragik i det här: vi lever i en tid där alla m�
 
 Slutligen, om du undrar vad du ska ta med dig från den här intervjun: följ hans exempel när livet blir för mycket — fokusera på det du kan påverka. Och om någon kräver din ståndpunkt i frågan om havsnivåhöjningar medan du sitter med träningsvärken från gårdagens pass — säg som han: "Jag vet inte. Jag tränar." Det är ett ärligt svar, och i dagens opinionstyrda värld kan det till och med kännas lite revolutionärt.`,
     category: 'Sport',
-    image: '/placeholder.jpg',
+      image: '/placeholder.svg',
     date: '2025-10-06',
   },
 ];
