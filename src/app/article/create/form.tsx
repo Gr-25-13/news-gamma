@@ -29,7 +29,7 @@ export default function CreateArticleForm() {
             image_url: "",
             editorsChoice: true,
             category: "",
-            author: "",
+            //author: "",
         }
     })
 
@@ -125,7 +125,7 @@ export default function CreateArticleForm() {
                         </FormItem>
                     )}
                 />
-                <FormField
+                {/*<FormField
                     control={form.control}
                     name="author"
                     render={({ field }) => (
@@ -134,12 +134,12 @@ export default function CreateArticleForm() {
                             <FormControl>
                                 {/* TODO: string array 
                                 <Input {...field} />
-                                */}
+                                
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
-                />
+                />*/}
 
 
                 <Button type="submit" disabled={form.formState.isSubmitting}>
