@@ -11,8 +11,9 @@ type Props = {
   params: { slug: string };
 };
 
-export default function ArticlePage({ params }: Props): React.ReactElement {
-  const article: Article | null = getArticleBySlug(params.slug);
+export default async function ArticlePage({ params }: Props): Promise<React.ReactElement> {
+  const { slug } = await params;
+  const article: Article | null = getArticleBySlug(slug);
 
   if (!article) {
     notFound();

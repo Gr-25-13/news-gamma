@@ -66,7 +66,7 @@ export function Aside({
         </ul>
       </section>
 
-      {/* CTA Prenumeration */}
+      {/* Prenumeration */}
       <section className="rounded-xl p-6 shadow bg-primary text-primary-foreground text-center">
         <h3 className="text-2xl font-bold mb-3">
           Vill du ha mer än en Dos?
@@ -106,7 +106,7 @@ export function Aside({
         </div>
       </section>
 
-      {/* Annons / Placeholder */}
+      {/* Annons / Elpriser */}
       <section className="rounded-xl p-6 text-center shadow bg-muted">
         <h3 className="text-lg font-bold mb-2 text-foreground">Annons</h3>
         <p className="text-sm text-muted-foreground">
