@@ -22,6 +22,10 @@ export default async function ArticleDetailsPage(props: { params: Params }) {
     const params = await props.params;
     const articleId = params.articleId;
 
+    if (articleId == null) {
+        return redirect("/article")
+    }
+
     const article = await prisma.article.findUnique({
         where: { id: articleId },
     })
