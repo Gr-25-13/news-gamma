@@ -9,12 +9,16 @@ import { Section } from "@/components/articles/Section";
 import type { Article } from "@/lib/articles";
 import { articles } from "@/lib/articles";
 
+//import { CookieSonner } from "./actions";
+
+
 export default function HomePage(): React.ReactElement {
   const main: Article = articles[0];
   const editors: Article[] = articles.slice(1, 3);
 
   return (
     <>
+
       <Navbar />
 
       <main className="flex-grow pt-8 pb-16">
@@ -38,6 +42,7 @@ export default function HomePage(): React.ReactElement {
       </main>
 
       <Footer />
+
     </>
   );
 }
