@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation"; // Ta bort useSearchParams eftersom vi inte behöver det längre
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Aside } from "@/components/layout/aside";
@@ -86,17 +86,22 @@ function CheckoutForm({ onSubmit }: { onSubmit: () => void }) {
 }
 
 export default function CheckoutPage(): React.ReactElement {
-  const search = useSearchParams();
   const router = useRouter();
-  const plan = (search?.get('plan') as string) || 'basic';
 
-  const planCatalog: Record<string, { name: string; price: string; features: string[] }> = {
-    basic: { name: 'Bas', price: '49 kr/månad', features: ['Begränsad tillgång till artiklar', 'Ingen reklam'] },
-    plus: { name: 'Plus', price: '99 kr/månad', features: ['Full tillgång', 'Nyhetsbrev', 'Prioriterad support'] },
-    premium: { name: 'Premium', price: '199 kr/månad', features: ['Full tillgång + arkiv', 'Personliga rekommendationer', 'VIP-evenemang'] },
+  // Kontrollera autentisering vid sidladdning
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'; // Simulerad auth-check
+    if (!isLoggedIn) {
+      router.push('/logga-in?message=Du måste registrera dig och logga in för att komma åt kassan.');
+    }
+  }, [router]);
+
+  // Hårdkodad till premium-planen
+  const selectedPlan = {
+    name: 'Premium',
+    price: '199 kr/månad',
+    features: ['Full tillgång + arkiv', 'Personliga rekommendationer', 'VIP-evenemang']
   };
-
-  const selectedPlan = planCatalog[plan] ?? planCatalog['basic'];
 
   // router navigation handled by CheckoutForm onSubmit
 
@@ -108,8 +113,8 @@ export default function CheckoutPage(): React.ReactElement {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2">
               <section className="bg-card p-6 rounded-xl shadow border border-border">
-                <h1 className="text-2xl font-bold text-foreground mb-2">Checkout — {plan}</h1>
-                <p className="text-muted-foreground mb-4">Fyll i dina uppgifter för att slutföra betalningen (hård kodad frontend-demo).</p>
+                <h1 className="text-2xl font-bold text-foreground mb-2">Checkout — Premium</h1>
+                <p className="text-muted-foreground mb-4">Fyll i dina uppgifter för att slutföra betalningen.</p>
 
                 <div className="mb-6">
                   <h2 className="text-lg font-semibold text-foreground">Sammanfattning</h2>
@@ -119,9 +124,7 @@ export default function CheckoutPage(): React.ReactElement {
                         <div className="text-md font-semibold text-foreground">{selectedPlan.name}</div>
                         <div className="text-sm text-muted-foreground">{selectedPlan.price}</div>
                       </div>
-                      <div>
-                        <a href="/hantera-prenumeration" className="text-sm text-primary hover:underline">Byt plan</a>
-                      </div>
+                  
                     </div>
                     <ul className="mt-3 text-sm text-muted-foreground space-y-1">
                       {selectedPlan.features.map((f) => (

@@ -16,9 +16,7 @@ type Plan = {
 };
 
 const PLANS: Plan[] = [
-  { id: "basic", name: "Bas", priceNumber: 49, priceLabel: "49 kr/månad", features: ["Begränsad tillgång", "Ingen reklam"] },
-  { id: "plus", name: "Plus", priceNumber: 99, priceLabel: "99 kr/månad", features: ["Full tillgång", "Nyhetsbrev"] },
-  { id: "premium", name: "Premium", priceNumber: 199, priceLabel: "199 kr/månad", features: ["Full tillgång + arkiv"] },
+  { id: "premium", name: "Premium", priceNumber: 199, priceLabel: "199 kr/månad", features: ["Full tillgång  till alla artiklar + arkiv"] },
 ];
 
 export default function PrenumerationLanding(): React.ReactElement {
@@ -38,25 +36,43 @@ export default function PrenumerationLanding(): React.ReactElement {
             <div className="lg:col-span-2 space-y-8">
               <section className="space-y-6">
                 <h1 className="text-2xl font-bold">Prenumeration</h1>
-                <p className="text-muted-foreground">Välj en plan nedan för att fortsätta till kassan. Du kan logga in för att hantera befintlig prenumeration.</p>
+                
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {PLANS.map((plan) => (
-                    <div key={plan.id} className="p-6 rounded-lg border border-border bg-card shadow">
-                      <h3 className="text-lg font-semibold mb-2">{plan.name}</h3>
-                      <div className="text-2xl font-extrabold mb-3">{plan.priceLabel}</div>
-                      <ul className="text-sm text-muted-foreground mb-4 space-y-1">
-                        {plan.features.map((f) => (
-                          <li key={f}>• {f}</li>
-                        ))}
-                      </ul>
-                      <div className="flex gap-2">
-                        <Button onClick={() => goToCheckout(plan.id)} className="flex-1">Välj</Button>
-                        <Button variant="ghost" onClick={() => alert('Detaljer (frontend-only)')}>Detaljer</Button>
+                {/* Focused single-plan view */}
+                {PLANS.length > 0 && (() => {
+                  const plan = PLANS[0];
+                  return (
+                    <div className="flex justify-center">
+                      <div className="w-full max-w-xl">
+                        <div className="p-8 rounded-2xl border border-border bg-gradient-to-b from-card/80 to-card shadow-lg">
+                          <div className="flex items-start justify-between gap-6">
+                            <div>
+                              <h3 className="text-2xl font-extrabold mb-1">{plan.name}</h3>
+                              <p className="text-muted-foreground mb-4">{plan.priceLabel} — månadsvis prenumeration</p>
+                              <div className="text-4xl font-extrabold text-primary mb-4">{plan.priceNumber} kr</div>
+                            </div>
+                            <div className="text-right">
+                              <Button onClick={() => goToCheckout(plan.id)} className="px-6 py-3">Bli Premium</Button>
+                            </div>
+                          </div>
+
+                          <div className="mt-6 grid gap-3">
+                            <h4 className="text-sm font-semibold">I Premium ingår</h4>
+                            <ul className="text-sm text-muted-foreground space-y-2 mt-2">
+                              {plan.features.map((f) => (
+                                <li key={f} className="flex items-start gap-3">
+                                  <span className="text-primary">✓</span>
+                                  <span>{f}</span>
+                                </li>
+                              ))}
+                            </ul>
+                            <p className="text-xs text-muted-foreground mt-4">Återkommande betalning. Avsluta när som helst i Mina sidor.</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )
+                })()}
               </section>
             </div>
 

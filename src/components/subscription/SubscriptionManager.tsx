@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { Check, X, RefreshCw, CreditCard } from 'lucide-react'
+import { RefreshCw, CreditCard } from 'lucide-react'
 
 type Plan = {
   id: string
@@ -11,23 +11,18 @@ type Plan = {
   features: string[]
 }
 
-const AVAILABLE_PLANS: Plan[] = [
-  { id: 'basic', name: 'Bas', price: '49 kr/månad', features: ['Begränsad tillgång', 'Ingen reklam'] },
-  { id: 'plus', name: 'Plus', price: '99 kr/månad', features: ['Full tillgång', 'Nyhetsbrev'] },
-  { id: 'premium', name: 'Premium', price: '199 kr/månad', features: ['Allt i Plus + arkiv'] },
-]
+const PREMIUM_PLAN: Plan = { id: 'premium', name: 'Premium', price: '199 kr/månad', features: ['Alla Artiklar + Arkiv'] }
 
 export default function SubscriptionManager(): React.ReactElement {
-  const [currentPlan, setCurrentPlan] = React.useState<Plan>(AVAILABLE_PLANS[1])
+  const [currentPlan, setCurrentPlan] = React.useState<Plan>(PREMIUM_PLAN)
   const [loading, setLoading] = React.useState(false)
 
-  function switchPlan(planId: string) {
+  function reactivateSubscription() {
     setLoading(true)
     setTimeout(() => {
-      const p = AVAILABLE_PLANS.find((pl) => pl.id === planId) || AVAILABLE_PLANS[0]
-      setCurrentPlan(p)
+      setCurrentPlan(PREMIUM_PLAN)
       setLoading(false)
-      alert(`Bytte till plan: ${p.name} (frontend-only)`)
+      alert('Prenumeration återaktiverad (frontend-only)')
     }, 700)
   }
 
@@ -52,37 +47,16 @@ export default function SubscriptionManager(): React.ReactElement {
           </div>
           <div className="flex items-center gap-2">
             <Button variant="ghost" onClick={() => alert('Visa fakturor (frontend-only)')}><CreditCard size={16} /></Button>
-            <Button variant="outline" onClick={() => switchPlan('plus')}>Byt plan</Button>
-            <Button variant="destructive" onClick={cancelSubscription}>Säg upp</Button>
+            {currentPlan.id === 'none' ? (
+              <Button variant="outline" onClick={reactivateSubscription} disabled={loading}>
+                {loading ? <RefreshCw size={16} className="animate-spin" /> : 'Återaktivera'}
+              </Button>
+            ) : (
+              <Button variant="destructive" onClick={cancelSubscription} disabled={loading}>
+                {loading ? <RefreshCw size={16} className="animate-spin" /> : 'Säg upp'}
+              </Button>
+            )}
           </div>
-        </div>
-      </section>
-
-      <section className="bg-card p-6 rounded-lg shadow border border-border">
-        <h3 className="text-lg font-semibold mb-3">Byt plan</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {AVAILABLE_PLANS.map((plan) => (
-            <div key={plan.id} className={`p-4 rounded-lg border ${plan.id === currentPlan.id ? 'border-primary bg-primary/5' : 'border-border'} `}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-semibold">{plan.name}</h4>
-                  <p className="text-sm text-muted-foreground">{plan.price}</p>
-                </div>
-                <div>
-                  {plan.id === currentPlan.id ? <Check size={18} className="text-primary" /> : <X size={18} className="text-muted-foreground" />}
-                </div>
-              </div>
-              <ul className="mt-3 text-sm text-muted-foreground space-y-1 mb-3">
-                {plan.features.map((f) => <li key={f}>• {f}</li>)}
-              </ul>
-              <div className="flex gap-2">
-                <Button variant={plan.id === currentPlan.id ? 'secondary' : 'default'} onClick={() => switchPlan(plan.id)} disabled={loading}>
-                  {plan.id === currentPlan.id ? 'Aktuell plan' : 'Välj'}
-                </Button>
-                <Button variant="ghost" onClick={() => alert('Visa detaljer (frontend-only)')}>Detaljer</Button>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
     </div>

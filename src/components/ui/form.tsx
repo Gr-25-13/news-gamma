@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
 import {
   Controller,
@@ -87,11 +86,9 @@ function FormItem({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function FormLabel({
-  className,
-  ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
-  const { error, formItemId } = useFormField()
+function FormLabel(props: React.LabelHTMLAttributes<HTMLLabelElement>) {
+  const { className, ...rest } = props;
+  const { error, formItemId } = useFormField();
 
   return (
     <Label
@@ -99,9 +96,9 @@ function FormLabel({
       data-error={!!error}
       className={cn("data-[error=true]:text-destructive", className)}
       htmlFor={formItemId}
-      {...props}
+      {...(rest as React.LabelHTMLAttributes<HTMLLabelElement>)}
     />
-  )
+  );
 }
 
 function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
