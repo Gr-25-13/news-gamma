@@ -93,21 +93,7 @@ export function Footer(): React.ReactElement {
             />
           ))}
  
-          {/* Nyhetsbrev */}
-          <div>
-            <h4 className={`text-lg font-semibold mb-4 text-secondary`}>
-              Håll dig uppdaterad
-            </h4>
-            <p className="text-sm text-muted-foreground mb-3">
-              Få vårt personaliserade nyhetsbrev (endast för betalande kunder).
-            </p>
- 
-            <Input type="email" placeholder="Din e-post" className="w-full" />
- 
-            <Button variant="default" className="mt-2 w-full">
-              Anmäl
-            </Button>
-          </div>
+       
         </div>
  
          {/* Copyright */}
