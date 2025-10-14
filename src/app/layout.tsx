@@ -1,7 +1,11 @@
+
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/theme-provider";
+
+
+
 
 const roboto = Roboto({
   weight: ["300", "400", "700", "900"],
@@ -24,7 +28,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
-        <Providers>{children}</Providers>
+        <Providers>{children}
+
+        </Providers>
+
+
       </body>
     </html>
   );
