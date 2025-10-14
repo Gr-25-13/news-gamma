@@ -1,6 +1,6 @@
 import HeroSection from "./components/navbar/herroSection";
 import { getSpotPrices } from "@/lib/spotprices";
-import { FaClock, FaEuroSign, FaSign } from "react-icons/fa"; // icons
+import SpotChart from "./components/spotchart";
 
 export default async function Home() {
   const today = new Date().toISOString().split("T")[0];
@@ -8,39 +8,23 @@ export default async function Home() {
   const areas = ["SE1", "SE2", "SE3", "SE4"];
 
   return (
-    <div className="font-sans min-h-screen p-8 sm:p-20">
+    <div className="font-sans min-h-screen p-8 sm:p-20 bg-sky-50">
       <HeroSection />
 
-      <main className="space-y-12">
-        {areas.map((area) => (
-          <div key={area}>
-            <h2 className="text-2xl font-bold text-center mb-6">
-              Spot Prices {area}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {data[area].map((price) => (
-                <div
-                  key={price.hour}
-                  className="p-4 border rounded-lg shadow hover:shadow-lg transition"
-                >
-                  <h3 className="font-semibold mb-2 text-center">
-                    <FaClock className="inline mr-1 text-gray-600" />
-                    Hour {price.hour}
-                  </h3>
-                  <p>
-                    <FaEuroSign className="inline mr-1 text-green-600" />
-                    {price.price_eur} EUR
-                  </p>
-                  <p>
-                    <FaSign className="inline mr-1 text-blue-600" />
-                    {price.price_sek} SEK
-                  </p>
-                  <p>Kmeans: {price.kmeans}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+      <main className="flex flex-col items-center mx-auto w-full max-w-7xl border rounded-lg p-6 bg-white shadow">
+        <h1 className="text-3xl font-bold text-blue-700 mb-8">
+          💡 Sweden Electricity Spot Prices ({today})
+        </h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+          {areas.map((area) => (
+            <SpotChart
+              key={area}
+              data={data[area]}
+              title={`Spot Prices ${area}`}
+            />
+          ))}
+        </div>
       </main>
     </div>
   );
