@@ -34,58 +34,21 @@ export const auth = betterAuth({
 // src/lib/better-auth.config.ts
 // src/lib/better-auth.config.ts
 import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { PrismaClient } from "@prisma/client";
 
-const mockUsers = [
-  {
-    id: "test-user-1",
-    email: "test@example.com",
-    emailVerified: false,
-    name: "Test User",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
+// Lägg till optionell databaskontroll
+const prisma = globalThis.prisma || new PrismaClient();
 
-const mockAdapter = {
-  // @ts-expect-error Implicit any type för data parameter i mock
-  async create(data) {
-    return { id: "new-id", ...data };
-  },
-  // @ts-expect-error Implicit any type för where parameter i mock
-  async findOne(where) {
-    if (where?.email === "test@example.com") {
-      return mockUsers[0];
-    }
-    return null;
-  },
-  async findMany() {
-    return mockUsers;
-  },
-  // @ts-expect-error Implicit any type för id och data parameters i mock
-  async update(id, data) {
-    return { id, ...data };
-  },
-  async delete(_id: string) {
-    return true;
-  },
-};
+if (process.env.NODE_ENV !== "production") {
+  globalThis.prisma = prisma;
+}
 
 export const auth = betterAuth({
-  // @ts-expect-error Mock adapter matchar inte Better Auth's adapter-typ
-  database: mockAdapter,
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+  }),
   emailAndPassword: {
     enabled: true,
-    async verifyPassword(password: string) {
-      // Hårdkodat lösenord för test
-      return password === "test123";
-    },
   },
-  session: {
-    expiresIn: 60 * 60 * 24 * 7,
-    updateAge: 60 * 60 * 24,
-  },
-  secret:
-    process.env.BETTER_AUTH_SECRET ||
-    "test-secret-key-minimum-32-characters-long",
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 });
