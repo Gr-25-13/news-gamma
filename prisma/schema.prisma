@@ -10,6 +10,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================
+// ARTICLE & CATEGORY MODELS
+// ============================================
+
 model Article {
   id            String     @id @default(cuid())
   headline      String
@@ -20,25 +24,34 @@ model Article {
   editorsChoice Boolean    @default(false)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
-  category      Category[]
-  author        User[]
+  authorId      String
+  author        User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categories    Category[]
+
+  @@index([authorId])
 }
 
 model Category {
   id       String    @id @default(cuid())
-  name     String
+  name     String    @unique
   articles Article[]
 }
 
+// ============================================
+// SUBSCRIPTION MODELS
+// ============================================
+
 model Subscription {
   id        String           @id @default(cuid())
-  user      User             @relation(fields: [userId], references: [id])
   userId    String
-  type      SubscriptionType @relation(fields: [typeId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   typeId    String
+  type      SubscriptionType @relation(fields: [typeId], references: [id])
   createdAt DateTime         @default(now())
   expiresAt DateTime
   active    Boolean          @default(true)
+
+  @@index([userId])
 }
 
 model SubscriptionType {
@@ -50,20 +63,28 @@ model SubscriptionType {
   subscriptions Subscription[]
 }
 
+// ============================================
+// USER & AUTH MODELS (Better Auth Compatible)
+// ============================================
+
 model User {
   id                 String               @id @default(cuid())
   email              String               @unique
-  emailVerified      DateTime?
+  emailVerified      Boolean              @default(false)
   name               String
   image              String?
-  role               Role[]
-  subscriptions      Subscription[]
-  articles           Article[]
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   newsletterOptIn    Boolean              @default(false)
+  
+  // Relations
+  roleId             String?
+  role               Role?                @relation(fields: [roleId], references: [id])
+  subscriptions      Subscription[]
+  articles           Article[]
   passwordResetToken PasswordResetToken[]
-  order              Order[]
+  orders             Order[]
+  
   // Better Auth relations
   sessions           Session[]
   accounts           Account[]
@@ -72,38 +93,42 @@ model User {
 }
 
 model Role {
-  id   String @id @default(cuid())
-  name String @unique  // <-- Lägg till @unique här
-  user User[]
+  id    String @id @default(cuid())
+  name  String @unique
+  users User[]
 }
 
 model PasswordResetToken {
   id        String   @id @default(cuid())
   token     String   @unique
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
+// ============================================
+// ORDER MODELS
+// ============================================
+
 model Order {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  paid      Boolean  @default(false)
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  paid      Boolean     @default(false)
+  userId    String?
+  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items     OrderItem[]
 
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  items OrderItem[]
+  @@index([userId])
 }
 
 model OrderItem {
-  id Int @id @default(autoincrement())
-
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
+  id        Int    @id @default(autoincrement())
+  orderId   Int
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   name      String
   price     Int
   image_url String
@@ -112,7 +137,9 @@ model OrderItem {
   @@index([orderId])
 }
 
-// Better Auth Tables
+// ============================================
+// BETTER AUTH TABLES
+// ============================================
 
 model Session {
   id        String   @id @default(cuid())
