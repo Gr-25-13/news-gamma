@@ -1,3 +1,9 @@
 import { auth } from "@/lib/better-auth.config";
 
-export { auth as GET, auth as POST };
+export async function GET(request: Request) {
+  return auth.handler(request);
+}
+
+export async function POST(request: Request) {
+  return auth.handler(request);
+}
