@@ -6,12 +6,13 @@ type NavLinksProps = {
 
 export default function NavLinks({ onClick }: NavLinksProps) {
   const links = [
-    { href: "/", label: "Senaste" },
+    { href: "/"     ,   label: "Home"},
+    {href: "/senast",   label: "Senaste" } ,
     { href: "/inrikes", label: "Inrikes" },
     { href: "/varlden", label: "Världen" },
     { href: "/ekonomi", label: "Ekonomi" },
-    { href: "/sport", label: "Sport" },
-    { href: "/vader", label: "Väder" },
+    { href: "/sport",   label: "Sport" },
+    { href: "/vader",   label: "Väder" },
   ];
 
   return (

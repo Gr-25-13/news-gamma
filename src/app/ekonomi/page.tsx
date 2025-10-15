@@ -2,31 +2,21 @@ import { getSpotPrices } from "@/lib/spotprices";
 import SpotChart from "../components/spotchart";
 
 export default async function SpotPricePage() {
-
-    
-    
-    const todayLocal = new Date().toLocaleDateString('sv-SE');
-     const data = await getSpotPrices(todayLocal);
-     const areas = ["SE1", "SE2", "SE3", "SE4"];
-   
-     
+  const todayLocal = new Date().toLocaleDateString("sv-SE");
+  const data = await getSpotPrices(todayLocal);
 
   return (
     <div className="font-sans min-h-screen p-8 sm:p-20 bg-sky-150">
-
       <main className="flex flex-col items-center mx-auto w-full max-w-7xl border rounded-lg p-6 bg-white shadow">
         <h1 className="text-3xl font-bold text-blue-700 mb-8">
           💡 Sweden Electricity Spot Prices ({todayLocal})
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-          {areas.map((area) => (
-            <SpotChart
-              key={area}
-              data={data[area]}
-              title={`Spot Prices ${area}`}
-            />
-          ))}
+          <SpotChart key="1" data={data.SE1} title="SE1" />
+          <SpotChart key="2" data={data.SE2} title="SE2" />
+          <SpotChart key="3" data={data.SE3} title="SE3" />
+          <SpotChart key="4" data={data.SE4} title="SE4" />
         </div>
       </main>
     </div>

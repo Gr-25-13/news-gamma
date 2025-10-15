@@ -1,5 +1,6 @@
 "use client";
 
+import { Se1, Se2, Se3, Se4 } from "@/lib/types/types";
 import {
   LineChart,
   Line,
@@ -10,16 +11,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-interface SpotChartData {
-  hour: string | number;
-  price_sek: number;
-}
-
 export default function SpotChart({
   data,
   title,
 }: {
-  data: SpotChartData[];
+  data: Se1[] | Se2[] | Se3[] | Se4[];
   title: string;
 }) {
   return (

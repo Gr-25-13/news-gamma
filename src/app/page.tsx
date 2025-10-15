@@ -1,14 +1,10 @@
-import { generateNews } from "@/lib/ai";
 import HeroSection from "./components/navbar/herroSection";
+import NewsPage from "./senast/page";
 
-export default async function Home() {
-  const object = await generateNews("Gaza");
+export default function Home() {
   return (
-    <div className="font-sans min-h-screen p-8 sm:p-20 bg-sky-150">
-      <HeroSection />
-      <div>
-        <h1>{object.title}</h1>
-      </div>
+    <div className=" container h-screen  mx-auto text-3xl text-center mt-14">
+      <p className="text-red-500 font-semibold">Wellcome to the Admin Page</p>
     </div>
   );
 }
