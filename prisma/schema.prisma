@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,10 +6,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-// ============================================
-// ARTICLE & CATEGORY MODELS
-// ============================================
 
 model Article {
   id            String     @id @default(cuid())
@@ -26,7 +19,7 @@ model Article {
   updatedAt     DateTime   @updatedAt
   authorId      String
   author        User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  categories    Category[]
+  categories    Category[] @relation("ArticleToCategory")
 
   @@index([authorId])
 }
@@ -34,22 +27,18 @@ model Article {
 model Category {
   id       String    @id @default(cuid())
   name     String    @unique
-  articles Article[]
+  articles Article[] @relation("ArticleToCategory")
 }
-
-// ============================================
-// SUBSCRIPTION MODELS
-// ============================================
 
 model Subscription {
   id        String           @id @default(cuid())
   userId    String
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   typeId    String
-  type      SubscriptionType @relation(fields: [typeId], references: [id])
   createdAt DateTime         @default(now())
   expiresAt DateTime
   active    Boolean          @default(true)
+  type      SubscriptionType @relation(fields: [typeId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -63,31 +52,23 @@ model SubscriptionType {
   subscriptions Subscription[]
 }
 
-// ============================================
-// USER & AUTH MODELS (Better Auth Compatible)
-// ============================================
-
 model User {
   id                 String               @id @default(cuid())
   email              String               @unique
-  emailVerified      Boolean              @default(false)
   name               String
   image              String?
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   newsletterOptIn    Boolean              @default(false)
-  
-  // Relations
   roleId             String?
-  role               Role?                @relation(fields: [roleId], references: [id])
-  subscriptions      Subscription[]
+  emailVerified      Boolean              @default(false)
   articles           Article[]
-  passwordResetToken PasswordResetToken[]
   orders             Order[]
-  
-  // Better Auth relations
-  sessions           Session[]
+  passwordResetToken PasswordResetToken[]
+  subscriptions      Subscription[]
   accounts           Account[]
+  sessions           Session[]
+  role               Role?                @relation(fields: [roleId], references: [id])
 
   @@map("user")
 }
@@ -102,24 +83,20 @@ model PasswordResetToken {
   id        String   @id @default(cuid())
   token     String   @unique
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
-
-// ============================================
-// ORDER MODELS
-// ============================================
 
 model Order {
   id        Int         @id @default(autoincrement())
   createdAt DateTime    @default(now())
   paid      Boolean     @default(false)
   userId    String?
-  user      User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user      User?       @relation(fields: [userId], references: [id])
   items     OrderItem[]
 
   @@index([userId])
@@ -128,18 +105,14 @@ model Order {
 model OrderItem {
   id        Int    @id @default(autoincrement())
   orderId   Int
-  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   name      String
   price     Int
   image_url String
   quantity  Int    @default(1)
+  order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
 }
-
-// ============================================
-// BETTER AUTH TABLES
-// ============================================
 
 model Session {
   id        String   @id @default(cuid())
@@ -161,7 +134,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -171,6 +143,7 @@ model Account {
   password              String?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([providerId, accountId])
   @@index([userId])

@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 }
 '''
 
-routes = ['callback', 'error', 'session', 'sign-in', 'sign-out', 'sign-up']
+routes = ['callback', 'error', 'session', 'sign-in', 'sign-out', 'signup']
 
 for route in routes:
     path = f'src/app/api/auth/{route}'

@@ -4,27 +4,47 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import authClient from "../../hooks/use-auth";
 
 export type RegisterData = {
   firstName: string;
   lastName: string;
   email: string;
   phone?: string;
+  password: string;
 };
 
-interface Props {
-  onSubmit?: (data: RegisterData) => void;
-}
+export default function RegisterForm() {
+  const form = useForm<RegisterData>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      password: "",
+    },
+  });
 
-export default function RegisterForm({ onSubmit }: Props) {
-  const form = useForm<RegisterData>({ defaultValues: { firstName: "", lastName: "", email: "", phone: "" } });
-
-  function handle(data: RegisterData) {
-    if (onSubmit) onSubmit(data);
-    else {
-      console.log("Register:", data);
-      alert("Registrering skickad (frontend-only)");
+  async function handle(data: RegisterData) {
+    try {
+      await authClient.signUp({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        phone: data.phone,
+      });
+      alert("Registrering lyckades!");
+    } catch (err: any) {
+      alert("Fel vid registrering: " + (err.message ?? err));
     }
   }
 
@@ -45,7 +65,6 @@ export default function RegisterForm({ onSubmit }: Props) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="lastName"
@@ -60,22 +79,27 @@ export default function RegisterForm({ onSubmit }: Props) {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="email"
-          rules={{ required: "E-postadress är obligatorisk", pattern: { value: /\S+@\S+/, message: "Ogiltig e-postadress" } }}
+          rules={{
+            required: "E-postadress är obligatorisk",
+            pattern: { value: /\S+@\S+/, message: "Ogiltig e-postadress" },
+          }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>E-postadress</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Ange din e-postadress" {...field} />
+                <Input
+                  type="email"
+                  placeholder="Ange din e-postadress"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="phone"
@@ -89,7 +113,24 @@ export default function RegisterForm({ onSubmit }: Props) {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="password"
+          rules={{ required: "Lösenord är obligatoriskt" }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Lösenord</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Ange ett lösenord"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end">
           <Button type="submit">Registrera</Button>
         </div>

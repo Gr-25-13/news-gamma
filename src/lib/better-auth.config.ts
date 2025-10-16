@@ -5,7 +5,7 @@
 
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import prisma from "./prisma"; // ← ÄNDRAT: Importera från prisma.ts
+import { prisma } from "./prisma"; // ← ÄNDRAT: Importera från prisma.ts
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
