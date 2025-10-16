@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import Image from 'next/image';
+"use client"
+
+// Image import removed because it's not used (logo was commented out)
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -22,9 +23,9 @@ function FooterSection({ title, links, variant = 'primary' }: FooterSectionProps
       <ul className="space-y-2 text-sm text-muted-foreground">
         {links.map((link) => (
           <li key={link.name}>
-            <Link href={link.href} className="hover:text-primary">
+            <a href={link.href} className="hover:text-primary">
               {link.name}
-            </Link>
+            </a>
           </li>
         ))}
       </ul>
@@ -32,24 +33,23 @@ function FooterSection({ title, links, variant = 'primary' }: FooterSectionProps
   );
 }
 
-const footerSections = [
+const footerSections: { title: string; variant?: FooterVariant; links: { name: string; href: string }[] }[] = [
   {
     title: 'Sidor',
     variant: 'primary' as FooterVariant,
     links: [
       { name: 'Hem', href: '#' },
-      { name: 'Registrera', href: '#' },
-      { name: 'Min Sida', href: '#' },
-     
+      { name: 'Prenumerera', href: '/prenumeration' },
+      { name: 'Om oss', href: '/om-oss' },
     ],
   },
   {
     title: 'Juridiskt',
     variant: 'muted' as FooterVariant,
     links: [
-      { name: 'Prenumerationsvillkor', href: '#' },
-      { name: 'Integritet & Cookies', href: '#' },
-      { name: 'Kontakta Oss', href: '#' },
+      { name: 'Prenumerationsvillkor', href: '/prenumerationsvillkor' },
+      { name: 'Integritet & Cookies', href: '/integritet-cookies' },
+      { name: 'Kontakta Oss', href: '/kontakta-oss' },
     ],
   },
 ];
@@ -60,7 +60,7 @@ export function Footer(): React.ReactElement {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Logga längst till vänster */}
-          <div className="flex items-start">
+          {/* <div className="flex items-start">
             <Link href="/" className="flex items-center space-x-3">
               <div className="relative h-12 w-12">
                 <Image
@@ -71,7 +71,7 @@ export function Footer(): React.ReactElement {
                 />
               </div>
             </Link>
-          </div>
+          </div> */}
  
           {/* Om Oss */}
           <div>
@@ -93,21 +93,7 @@ export function Footer(): React.ReactElement {
             />
           ))}
  
-          {/* Nyhetsbrev */}
-          <div>
-            <h4 className={`text-lg font-semibold mb-4 text-secondary`}>
-              Håll dig uppdaterad
-            </h4>
-            <p className="text-sm text-muted-foreground mb-3">
-              Få vårt personaliserade nyhetsbrev (endast för betalande kunder).
-            </p>
- 
-            <Input type="email" placeholder="Din e-post" className="w-full" />
- 
-            <Button variant="default" className="mt-2 w-full">
-              Anmäl
-            </Button>
-          </div>
+       
         </div>
  
          {/* Copyright */}
