@@ -31,7 +31,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
       onAcceptCallback = () => {},
       onDeclineCallback = () => {},
       className,
-      description = "We use cookies to ensure you get the best experience on our website. For more information on how we use cookies, please see our cookie policy.",
+      description = "Vi använder cookies för att säkerställa att du får den bästa upplevelsen på vår webbplats. För mer information om hur vi använder cookies, se vår cookiepolicy.",
       learnMoreHref = "#",
       ...props
     },
@@ -96,7 +96,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
         <div {...commonWrapperProps}>
           <Card className="m-3 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-lg">We use cookies</CardTitle>
+              <CardTitle className="text-lg">Vi använder cookies</CardTitle>
               <Cookie className="h-5 w-5" />
             </CardHeader>
             <CardContent className="space-y-2">
@@ -104,14 +104,13 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
                 {description}
               </CardDescription>
               <p className="text-xs text-muted-foreground">
-                By clicking <span className="font-medium">"Accept"</span>, you
-                agree to our use of cookies.
+                Genom att klicka på <span className="font-medium">"Acceptera"</span> godkänner du vår användning av cookies.
               </p>
               <a
                 href={learnMoreHref}
                 className="text-xs text-primary underline underline-offset-4 hover:no-underline"
               >
-                Learn more
+                Läs mer
               </a>
             </CardContent>
             <CardFooter className="flex gap-2 pt-2">
@@ -120,10 +119,10 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
                 variant="secondary"
                 className="flex-1"
               >
-                Decline
+                Avböj
               </Button>
               <Button onClick={handleAccept} className="flex-1">
-                Accept
+                Acceptera
               </Button>
             </CardFooter>
           </Card>
@@ -136,7 +135,7 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
         <div {...commonWrapperProps}>
           <Card className="m-3 shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 h-0 px-4">
-              <CardTitle className="text-base">We use cookies</CardTitle>
+              <CardTitle className="text-base">Vi använder cookies</CardTitle>
               <Cookie className="h-4 w-4" />
             </CardHeader>
             <CardContent className="pt-0 pb-2 px-4">
@@ -151,14 +150,14 @@ const CookieConsent = React.forwardRef<HTMLDivElement, CookieConsentProps>(
                 size="sm"
                 className="flex-1 rounded-full"
               >
-                Decline
+                Avböj
               </Button>
               <Button
                 onClick={handleAccept}
                 size="sm"
                 className="flex-1 rounded-full"
               >
-                Accept
+                Acceptera
               </Button>
             </CardFooter>
           </Card>
