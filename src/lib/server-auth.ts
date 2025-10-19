@@ -2,26 +2,23 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from './auth';
 
-/**
- * Ensure the current request has an authenticated admin session.
- * If not authenticated or not an admin, redirect to login page.
- */
+//säkerställ att användaren är admin, annars omdirigera till inloggningssidan
 export async function requireAdmin() {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session || !session.user || session.user.role !== 'admin') {
-    // Redirect to login. Using redirect keeps the check server-side.
+    // skickas till inloggningssidan om inte admin
     redirect('/logga-in');
   }
 
   return session;
 }
-
+// Få nuvarande session utan att kräva inloggning
 export async function getSession() {
   const session = await auth.api.getSession({ headers: await headers() });
   return session;
 }
-
+// Säkerställ att användaren är inloggad, annars omdirigera till inloggningssidan
 export async function requireUser() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {

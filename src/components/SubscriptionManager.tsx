@@ -20,7 +20,7 @@ export default function SubscriptionManager(): React.ReactElement {
           type="button"
           className="inline-flex items-center px-3 py-1.5 rounded-md bg-primary text-primary-foreground"
           onClick={() => {
-            // placeholder: real implementation can open a modal or call API/modal
+          // Placeholder för prenumerationshanteringslogik
             window.alert("Öppna prenumerationsinställningar");
           }}
         >

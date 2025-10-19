@@ -29,7 +29,7 @@ export type UpdateArticleInput = z.infer<typeof updateArticleSchema>;
 export const deleteArticleSchema = z.object({ id: z.string().min(1) });
 export type DeleteArticleInput = z.infer<typeof deleteArticleSchema>;
 
-// --- Category Schemas ---
+// --- Kategori Schemas ---
 export const createCategorySchema = z.object({
   name: z.string().min(1, { message: "Kategori-namn är obligatoriskt." }),
   description: z.string().optional(),
@@ -46,7 +46,7 @@ export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 export const deleteCategorySchema = z.object({ id: z.string().min(1) });
 export type DeleteCategoryInput = z.infer<typeof deleteCategorySchema>;
 
-// --- Subscription Type Schemas ---
+// --- Abonnemangstyp Schemas ---
 export const createSubscriptionTypeSchema = z.object({
   name: z.string().min(1, { message: "Namn för abonnemangstyp krävs." }),
   description: z.string().optional(),
@@ -67,7 +67,7 @@ export type UpdateSubscriptionTypeInput = z.infer<typeof updateSubscriptionTypeS
 export const deleteSubscriptionTypeSchema = z.object({ id: z.string().min(1) });
 export type DeleteSubscriptionTypeInput = z.infer<typeof deleteSubscriptionTypeSchema>;
 
-// --- Subscription Schemas ---
+// --- Prenumeration Schemas ---
 export const createSubscriptionSchema = z.object({
   userId: z.string().min(1),
   typeId: z.string().min(1),
@@ -86,7 +86,7 @@ export type UpdateSubscriptionInput = z.infer<typeof updateSubscriptionSchema>;
 export const deleteSubscriptionSchema = z.object({ id: z.string().min(1) });
 export type DeleteSubscriptionInput = z.infer<typeof deleteSubscriptionSchema>;
 
-// --- User (admin view) ---
+// --- Användare (admin view) ---
 export const adminUserSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
@@ -139,6 +139,8 @@ export const checkoutOrderSchema = z.object({
 export type CheckoutOrderInput = z.infer<typeof checkoutOrderSchema>;
 
 // --- Misc helpers ---
+// Update order status schema
+// Behöver göra om den här då vi inte ska skicka orders utan endast uppdatera status
 export const updateOrderStatusSchema = z.object({
   id: z.number().int().positive(),
   status: z.enum(["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]),

@@ -6,7 +6,7 @@ import { admin } from "better-auth/plugins";
 export { SignUpSchema, SignInSchema, PasswordResetSchema, PasswordResetRequestSchema, type SignUpInput, type SignInInput } from "./schemas/auth";
 
 export const auth = betterAuth({
-  // Secret used to sign cookies/tokens. Make sure BETTER_AUTH_SECRET is set in your env.
+  // Hemlig nyckel för att signera tokens och annan känslig data
   secret: process.env.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -17,17 +17,17 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    // Match client-side validation and Better Auth defaults
+    // matchande med klientens valideringsregler
     minPasswordLength: 8,
-    // Disable email verification requirement - Better Auth uses separate Verification table
+    // Avaktivera e-postverifiering för nuvarande användare eftersom vi inte har User.emailVerified-fältet
     requireEmailVerification: false,
-    // Optional: send password reset email (logs link for now)
+    // optimalt
     async sendResetPassword({ user, url /*, token*/ }) {
       // TODO: Integrate your email provider here
       console.log(`[BetterAuth] Password reset requested for ${user.email}. Link: ${url}`);
     },
   },
-  // Email verification: disabled for now since we don't have User.emailVerified field
+  // E-post verifiering inaktiverad för nuvarande användare
   emailVerification: {
     sendOnSignUp: false, // Don't send verification email on signup
     async sendVerificationEmail({ user, url /*, token*/ }) {
@@ -37,9 +37,8 @@ export const auth = betterAuth({
     // autoSignInAfterVerification: true,
   },
   plugins: [admin()],
-  // Add error hook to log server-side errors during sign-up/auth operations
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: async (ctx: any) => {
+ //Lägg till enkel felrapportering för att underlätta felsökning under utveckling
+  onError: async (ctx: BetterAuthErrorContext) => {
     console.error("[BetterAuth] Error occurred:");
     console.error("  Path:", ctx.path);
     console.error("  Error:", ctx.error);
@@ -48,3 +47,9 @@ export const auth = betterAuth({
 });
 
 // Server-only helpers moved to src/lib/server-auth.ts to avoid importing next/headers in client bundles.
+
+type BetterAuthErrorContext = {
+  path: string;
+  error: Error;
+  // Lägg till fler fält om du vet vilka som finns
+};
