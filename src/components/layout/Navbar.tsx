@@ -18,7 +18,7 @@ const navigation: { name: string; href: string }[] = [
 	{ name: 'Senaste', href: '#' },
 	{ name: 'Inrikes', href: '#' },
 	{ name: 'Världen', href: '#' },
-	{ name: 'Ekonomi', href: '#' },
+	{ name: 'Ekonomi', href: '/ekonomi' },
 	{ name: 'Sport', href: '#' },
 	{ name: 'Väder', href: '#' },
 ];

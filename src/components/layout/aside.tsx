@@ -213,7 +213,7 @@ export function Aside({
       <section className="rounded-xl p-6 text-center shadow bg-muted">
         <h3 className="text-lg font-bold mb-2 text-foreground">Annons</h3>
         <p className="text-sm text-muted-foreground">Få dina elpriser direkt i inboxen. Som om det hjälpte.</p>
-        <Link href="#" className="text-sm font-medium text-primary hover:underline mt-2 inline-block">
+        <Link href="/ekonomi" className="text-sm font-medium text-primary hover:underline mt-2 inline-block">
           Visa Elpriser (API)
         </Link>
       </section>
