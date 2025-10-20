@@ -1,36 +1,27 @@
-// middleware.ts körs vid varje request för att kolla om användaren är autentiserad.
-// Här sker routskydd och sessionvalidering för skyddade sidor.
-// Eventuella ändringar i sessionslogik eller cookie-namn måste kommuniceras till hela teamet.
-// Viktigt: Om API eller sessionsformat ändras måste även hooks och konfiguration uppdateras.
-
-// src/middleware.ts
-// src/middlesware.ts
-// src/middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth"; // <-- Korrekt import
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  // Kontrollera om en sessions-cookie finns utan att validera den mot databasen.
+  // Detta är en snabb, ytlig kontroll som fungerar i Edge Runtime.
+  const sessionCookie = getSessionCookie(req);
 
-  // Rewrite paths starting with /api/auth/sign-up to /api/auth/signup
-  if (pathname.startsWith('/api/auth/sign-up')) {
-    const newPath = pathname.replace('/sign-up', '/signup');
-    return NextResponse.rewrite(new URL(newPath, req.url));
+  // Om ingen cookie finns, omdirigera till inloggningssidan.
+  if (!sessionCookie) {
+    const loginUrl = new URL("/logga-in", req.url);
+    loginUrl.searchParams.set(
+      "message",
+      "Du måste logga in för att se den här sidan."
+    );
+    return NextResponse.redirect(loginUrl);
   }
 
-  // For all other matched routes, enforce authentication
-  const session = await auth.api.getSession({
-    headers: req.headers,
-  });
-
-  if (!session) {
-    return NextResponse.redirect(new URL("/auth/login", req.url));
-  }
-
+  // Om en cookie finns, låt förfrågan fortsätta.
+  // Den faktiska, säkra valideringen av sessionen sker sedan på sidan/API-rutten.
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/user/:path*", "/admin/:path*", "/api/auth/sign-up/:path*"],
+  matcher: ["/installningar/:path*", "/hantera-prenumeration/:path*"],
 };

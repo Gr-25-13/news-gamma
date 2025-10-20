@@ -55,10 +55,10 @@ export default function RegisterForm() {
           name="firstName"
           rules={{ required: "Förnamn är obligatoriskt" }}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="firstNameInput">Förnamn</FormLabel>
+            <FormItem className="grid w-full gap-2">
+              <FormLabel>Förnamn</FormLabel>
               <FormControl>
-                <Input id="firstNameInput" placeholder="Ange ditt förnamn" {...field} />
+                <Input placeholder="Ange ditt förnamn" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,7 +69,7 @@ export default function RegisterForm() {
           name="lastName"
           rules={{ required: "Efternamn är obligatoriskt" }}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="grid w-full gap-2">
               <FormLabel>Efternamn</FormLabel>
               <FormControl>
                 <Input placeholder="Ange ditt efternamn" {...field} />
@@ -86,7 +86,7 @@ export default function RegisterForm() {
             pattern: { value: /\S+@\S+/, message: "Ogiltig e-postadress" },
           }}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="grid w-full gap-2">
               <FormLabel>E-postadress</FormLabel>
               <FormControl>
                 <Input
@@ -103,7 +103,7 @@ export default function RegisterForm() {
           control={form.control}
           name="phone"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="grid w-full gap-2">
               <FormLabel>Telefonnummer (valfri)</FormLabel>
               <FormControl>
                 <Input placeholder="Ange ditt telefonnummer" {...field} />
@@ -117,7 +117,7 @@ export default function RegisterForm() {
           name="password"
           rules={{ required: "Lösenord är obligatoriskt" }}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="grid w-full gap-2">
               <FormLabel>Lösenord</FormLabel>
               <FormControl>
                 <Input

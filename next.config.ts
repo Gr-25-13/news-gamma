@@ -1,14 +1,7 @@
-import { NextConfig } from "next";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Befintlig konfiguration...
-
-  // Lägg till Turbopack root
-  experimental: {
-    turbo: {
-      root: process.cwd(), // Använd aktuell projekt-katalog som root
-    },
-  },
+  // Din befintliga konfiguration här (om du har någon)
 };
 
 export default nextConfig;

@@ -4,11 +4,16 @@
 // Meddela teamet vid ändringar av cookie-namn eller sessionstider
 
 import { betterAuth } from "better-auth";
+import { Postgres } from "@prisma/adapter-pg";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma"; // ← ÄNDRAT: Importera från prisma.ts
 
 export const auth = betterAuth({
-  database: prismaAdapter(prisma),
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+    // @ts-expect-error
+    adapter: Postgres,
+  }),
   emailAndPassword: {
     enabled: true,
   },
@@ -16,14 +21,5 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 30, // 30 dagar
     updateAge: 60 * 60 * 24, // uppdatera dagligen
   },
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET!,
-
-  // Next.js 15 kompatibilitet
-  advanced: {
-    generateId: () => {
-      // Säker ID-generering som fungerar i alla miljöer
-      return Math.random().toString(36).substring(2) + Date.now().toString(36);
-    },
-  },
 });

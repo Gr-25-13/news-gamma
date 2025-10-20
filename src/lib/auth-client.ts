@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000/api/auth", // använder korrekt baseURL [4]
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 });
 
 // Behåll ENDAST denna namngivna export:

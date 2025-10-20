@@ -4,6 +4,14 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 type FormData = {
   email: string;
@@ -16,40 +24,60 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ onSubmit, onCancel }: LoginFormProps) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<FormData>({ defaultValues: { email: "", password: "" } });
+  const form = useForm<FormData>({
+    defaultValues: { email: "", password: "" },
+    mode: "onTouched",
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-      <div>
-        <label className="block text-sm text-muted-foreground mb-1">E-post</label>
-        <Input
-          type="email"
-          {...register("email", {
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          rules={{
             required: "E-post krävs",
             pattern: { value: /\S+@\S+\.\S+/, message: "Ogiltig e-post" },
-          })}
+          }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-post</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="din@epost.se" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.email && <p className="text-xs text-destructive mt-1">{errors.email.message}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm text-muted-foreground mb-1">Lösenord</label>
-        <Input
-          type="password"
-          {...register("password", { required: "Lösenord krävs", minLength: { value: 6, message: "Minst 6 tecken" } })}
+        <FormField
+          control={form.control}
+          name="password"
+          rules={{ required: "Lösenord krävs" }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Lösenord</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="••••••••" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        {errors.password && <p className="text-xs text-destructive mt-1">{errors.password.message}</p>}
-      </div>
 
-      <div className="flex items-center justify-between gap-2">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>Avbryt</Button>
-        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Loggar in...' : 'Logga in'}</Button>
-      </div>
-    </form>
+        <div className="flex items-center justify-between gap-2 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={form.formState.isSubmitting}
+          >
+            Avbryt
+          </Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? "Loggar in..." : "Logga in"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
-
