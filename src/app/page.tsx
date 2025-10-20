@@ -8,13 +8,14 @@ import { ArticleCard } from "@/components/articles/ArticleCard";
 import { Section } from "@/components/articles/Section";
 import type { Article } from "@/lib/articles";
 import { articles } from "@/lib/articles";
+import NewsPage from "@/components/ai-news";
 
 //import { CookieSonner } from "./actions";
 
 export default function HomePage(): React.ReactElement {
   const main: Article = articles[0];
   const editors: Article[] = articles.slice(1, 3);
-
+  
   return (
     <>
       <Navbar />
@@ -32,6 +33,7 @@ export default function HomePage(): React.ReactElement {
                   ))}
                 </div>
               </Section>
+              <NewsPage />
             </div>
 
             <Aside />
