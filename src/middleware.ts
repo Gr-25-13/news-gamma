@@ -8,9 +8,18 @@
 // src/middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "./lib/better-auth.config";
+import { auth } from "@/lib/auth"; // <-- Korrekt import
 
 export async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Rewrite paths starting with /api/auth/sign-up to /api/auth/signup
+  if (pathname.startsWith('/api/auth/sign-up')) {
+    const newPath = pathname.replace('/sign-up', '/signup');
+    return NextResponse.rewrite(new URL(newPath, req.url));
+  }
+
+  // For all other matched routes, enforce authentication
   const session = await auth.api.getSession({
     headers: req.headers,
   });
@@ -23,5 +32,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/user/:path*", "/admin/:path*"],
+  matcher: ["/user/:path*", "/admin/:path*", "/api/auth/sign-up/:path*"],
 };

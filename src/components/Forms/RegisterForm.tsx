@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { authClient } from "@/lib/auth-client";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import authClient from "../../hooks/use-auth";
+//import authClient from "../../hooks/use-auth";
 
 export type RegisterData = {
   firstName: string;
@@ -35,12 +36,10 @@ export default function RegisterForm() {
 
   async function handle(data: RegisterData) {
     try {
-      await authClient.signUp({
+      await authClient.signUp.email({
         email: data.email,
         password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
+        name: `${data.firstName} ${data.lastName}`,
       });
       alert("Registrering lyckades!");
     } catch (err: any) {
@@ -57,9 +56,9 @@ export default function RegisterForm() {
           rules={{ required: "Förnamn är obligatoriskt" }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Förnamn</FormLabel>
+              <FormLabel htmlFor="firstNameInput">Förnamn</FormLabel>
               <FormControl>
-                <Input placeholder="Ange ditt förnamn" {...field} />
+                <Input id="firstNameInput" placeholder="Ange ditt förnamn" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
