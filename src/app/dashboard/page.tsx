@@ -1,11 +1,12 @@
 import { DashboardCard, DashboardCardContent } from "@/components/dashboard/dashboard-card";
 import UserDataCard, { UserDataProps } from "@/components/dashboard/user-data-card";
-import { Calendar, Coins, UserRoundCheck, Users } from "lucide-react";
+import { Calendar, Coins, CreditCard, UserRoundCheck, Users } from "lucide-react";
 import { db } from "@/lib/db";
 import { eachMonthOfInterval, endOfMonth, format, formatDistanceToNow, startOfMonth, subDays, subMonths } from "date-fns";
 import { subYears, startOfYear, endOfYear } from 'date-fns'
 import BarChart from "@/components/dashboard/barchart";
 import LineGraph from "@/components/dashboard/line-graph";
+import UserPurchaseCard, { UserPurchaseProps } from "@/components/dashboard/user-purchase-card";
 
 
 export default async function Dashboard() {
@@ -76,10 +77,10 @@ export default async function Dashboard() {
         },
         take: 7
     })
-    const UserData: UserDataProps[] = recentUsers.map((account: { name: string; email: string; image: string; createdAt: string | number | Date; }) => ({
+    const UserData: UserDataProps[] = recentUsers.map((account: { name: string; email: string; image: unknown; createdAt: Date; }) => ({
         name: account.name || 'Unknown',
         email: account.email || 'Unknown',
-        image: account.image || "../../public/user-icon.jpg",
+        image: account.image || "/images/user-icon.jpg",
         time: formatDistanceToNow(new Date(account.createdAt), { addSuffix: true }),
     }))
 
@@ -140,6 +141,27 @@ export default async function Dashboard() {
     console.log(monthlyRevenueData)
     /*** */
 
+    //Fetch recent sales
+    const recentSales = await db.order.findMany({
+        orderBy: {
+            createdAt: 'desc'
+        },
+        take: 7,
+        include: {
+            user: true
+        }
+    })
+
+    const PurchaseCard: UserPurchaseProps[] = recentSales.map((
+        purchase => ({
+            name: purchase.user?.name || 'Unknown',
+            email: purchase.user?.email || 'Unknown',
+            paid: purchase.paid ? 'Paid' : 'Unpaid',
+            //image: purchase.user?. || "/images/user-icon.jpg",
+
+        }))
+    )
+
 
     return (
         <div className="flex flex-col gap-5 w-full">
@@ -187,6 +209,22 @@ export default async function Dashboard() {
                                     email={data.email}
                                     time={data.time}>
                                 </UserDataCard>
+                            ))}
+                        </DashboardCardContent>
+                        <DashboardCardContent>
+                            <section className="flex justify-between gap-2 pb-2">
+                                <p>Senaste köp</p>
+                                <CreditCard className="h-4 w-4" />
+                            </section>
+                            {PurchaseCard.map((data, index) => (
+                                <UserPurchaseCard
+                                    key={index}
+                                    name={data.name}
+                                    //image={data.image}
+                                    email={data.email}
+                                    paid={data.paid}
+                                >
+                                </UserPurchaseCard>
                             ))}
                         </DashboardCardContent>
                     </section>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 export type UserDataProps = {
     name: string;
     email: string;
@@ -6,13 +7,13 @@ export type UserDataProps = {
 }
 
 export default function UserDataCard(props: UserDataProps) {
-    const defaultImage = "../../../public/user-icon.jpg"
+    const defaultImage = "/images/user-icon.jpg"
     return (
         <div className="flex flex-wrap justify-between gap-3">
             <section className="flex justify-between gap-3">
                 <div className="h-12 w-12rounded-full">
-                    <img width={300} height={300} src={props.image || defaultImage}
-                        alt="avatar" className="rounded-full h-12 w-12"></img>
+                    <Image width={300} height={300} src={props.image || defaultImage}
+                        alt="avatar" className="rounded-full h-12 w-12"></Image>
                 </div>
                 <div className="text-sm">
                     <p>{props.name}</p>
