@@ -9,7 +9,6 @@ import { setConsentCookie } from "@/app/actions/cookieConsent";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const handleAccept = async () => {
-
     await setConsentCookie('accepted');
     console.log('Cookie consent accepted');
   };

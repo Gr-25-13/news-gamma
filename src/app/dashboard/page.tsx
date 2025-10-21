@@ -7,6 +7,7 @@ import { subYears, startOfYear, endOfYear } from 'date-fns'
 import BarChart from "@/components/dashboard/barchart";
 import LineGraph from "@/components/dashboard/line-graph";
 import UserPurchaseCard, { UserPurchaseProps } from "@/components/dashboard/user-purchase-card";
+import GoalDataCard from "@/components/dashboard/goal";
 
 
 export default async function Dashboard() {
@@ -77,7 +78,9 @@ export default async function Dashboard() {
         },
         take: 7
     })
-    const UserData: UserDataProps[] = recentUsers.map((account: { name: string; email: string; image: unknown; createdAt: Date; }) => ({
+    const UserData: UserDataProps[] = recentUsers.map((account: {
+        name: string; email: string; image: unknown; createdAt: Date;
+    }) => ({
         name: account.name || 'Unknown',
         email: account.email || 'Unknown',
         image: account.image || "/images/user-icon.jpg",
@@ -161,7 +164,8 @@ export default async function Dashboard() {
 
         }))
     )
-
+    const goalAmount = 1000;
+    const goalProgress = totalProfitPremium / goalAmount * 100;
 
     return (
         <div className="flex flex-col gap-5 w-full">
@@ -232,7 +236,7 @@ export default async function Dashboard() {
                         <BarChart data={monthlyUsersData}></BarChart>
                         <LineGraph data={monthlyRevenueData} />
                     </section>
-
+                    <GoalDataCard goal={goalAmount} value={goalProgress} />
                 </div>
             </div>
         </div>
