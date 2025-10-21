@@ -34,6 +34,7 @@ function getThunderRiskLevel(probability: number): {
       textClass: "text-destructive/90 text-green-600",
       bgClass: "bg-destructive/10",
     };
+    return { text: "Låg", textClass: "text-destructive/90 text-green-600", bgClass: "bg-destructive/10" };
   if (probability < 50)
     return {
       text: "Medel",
@@ -45,6 +46,8 @@ function getThunderRiskLevel(probability: number): {
     textClass: "text-destructive",
     bgClass: "bg-destructive/10",
   };
+    return { text: "Medel", textClass: "text-secondary-foreground text-amber-600", bgClass: "bg-secondary/10" };
+  return { text: "Hög", textClass: "text-destructive", bgClass: "bg-destructive/10" };
 }
 
 // New: map weather summary text to an emoji
@@ -238,9 +241,11 @@ export default async function Page({
   const tenDayMidday = weather
     ? getNextDaysMidday(weather.timeseries, 11).slice(1)
     : [];
+  const tenDayMidday = weather ? getNextDaysMidday(weather.timeseries, 11).slice(1) : [];
 
   return (
     <div>
+    <>
       <Navbar />
       <div
         className="bg-background text-foreground"
@@ -252,6 +257,7 @@ export default async function Page({
           flex: 1,
         }}
       >
+      <div className="bg-background text-foreground flex-1">
         {/* Header Section */}
         <header
           className="bg-primary shadow-md"
@@ -283,11 +289,26 @@ export default async function Page({
               >
                 Väderskuggan
               </h1>
+        <header className="bg-primary shadow-md p-6 sm:p-8">
+          <div className="max-w-5xl mx-auto text-center">
+          <div className="flex flex-col items-center justify-center gap-4 mb-2">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32">
+              <Image
+                src="/images/vaderskuggan.png"
+                alt="vaderskuggan"
+                fill
+                className="object-contain"
+                sizes="(max-width: 600px) 80px, 120px"
+              />
             </div>
 
             <div
               className="text-primary-foreground text-center"
               style={{ margin: "0 0 24px 0", lineHeight: 1.15 }}
+            <h1 className="text-primary-foreground" style={{
+                margin: "0",
+                fontSize: "32px",
+              }}
             >
               <div
                 style={{
@@ -302,7 +323,18 @@ export default async function Page({
               <div style={{ fontSize: "14px", opacity: 0.9 }}>
                 Din dagliga dos av meteorologisk besvikelse.
               </div>
+              Väderskuggan
+            </h1>
+          </div>
+
+          <div className="text-primary-foreground text-center mb-6 leading-tight">
+            <div className="text-lg font-bold mb-1 tracking-tight">
+              Molnigt med en chans till sol och eftertanke
             </div>
+            <div className="text-sm opacity-90">
+              Din dagliga dos av meteorologisk besvikelse.
+            </div>
+          </div>
 
             <form
               method="get"
@@ -323,6 +355,32 @@ export default async function Page({
                 Sök
               </button>
             </form>
+          <form method="get" className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <input
+              name="location"
+              defaultValue={location}
+              placeholder="Sök efter stad eller plats..."
+              aria-label="location"
+              className="w-full sm:flex-1 p-3.5 rounded-md border-2 border-transparent bg-card text-card-foreground outline-none text-base max-w-2xl"
+            />
+            <button type="submit" className="rounded-md font-semibold bg-secondary text-secondary-foreground px-8 py-3 shadow-sm">
+              Sök
+            </button>
+          </form>
+        </div>
+      </header>
+
+      {/* Main Content */}
+        <main className="max-w-5xl mx-auto p-6 sm:p-8">
+        {!location ? (
+          <ClientGeoWeather />
+        ) : !weather ? (
+            <div className="text-center bg-card rounded-lg border-2 border-destructive/20 p-10 sm:p-16">
+              <div className="text-5xl mb-4">🌦️</div>
+              <p className="text-lg text-foreground/80">
+              {`Kunde inte hämta väderdata för “${location}”`}
+            </p>
+              <p className="text-sm text-muted-foreground mt-2">Kontrollera stavningen eller prova en annan plats.</p>
           </div>
         </header>
 
@@ -347,10 +405,13 @@ export default async function Page({
             </div>
           ) : (
             <section>
+        ) : (
+          <section>
               {/* Insert: compact current weather card */}
               {weather.timeseries[0] && (
                 <div className="current-card flex items-center gap-4 mb-5 p-3 bg-card rounded-lg border border-border shadow-sm">
                   <div style={{ fontSize: 48, lineHeight: 1 }}>
+                  <div className="text-5xl leading-none">
                     {getWeatherEmoji(weather.timeseries[0].summary)}
                   </div>
 
@@ -359,24 +420,28 @@ export default async function Page({
                       style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}
                       className="text-primary"
                     >
+                    <div className="text-2xl font-bold mb-1 text-primary">
                       {weather.timeseries[0].temp}°C
                     </div>
                     <div
                       style={{ fontSize: 14, opacity: 0.8 }}
                       className="text-foreground"
                     >
+                    <div className="text-sm opacity-80 text-foreground">
                       {translateSummary(weather.timeseries[0].summary)}
                     </div>
                     <div
                       style={{ fontSize: 13, opacity: 0.8, marginTop: 6 }}
                       className="text-foreground"
                     >
+                    <div className="text-[13px] opacity-80 mt-1.5 text-foreground">
                       {formatDateShort(weather.timeseries[0].validTime)}
                     </div>
                     <div
                       style={{ fontSize: 12, opacity: 0.7 }}
                       className="text-foreground"
                     >
+                    <div className="text-xs opacity-70 text-foreground">
                       {formatTime(weather.timeseries[0].validTime)}
                     </div>
                   </div>
@@ -389,12 +454,15 @@ export default async function Page({
                       style={{ fontSize: 12, opacity: 0.7 }}
                       className="text-foreground"
                     >
+                  <div className="ml-auto text-right">
+                    <div className="text-xs opacity-70 text-foreground">
                       Känns som
                     </div>
                     <div
                       style={{ fontSize: 14, fontWeight: 600 }}
                       className="text-foreground"
                     >
+                    <div className="text-sm font-semibold text-foreground">
                       {typeof weather.timeseries[0].temp === "number"
                         ? `${weather.timeseries[0].temp}°C`
                         : "—"}
@@ -416,6 +484,7 @@ export default async function Page({
                     borderTop: "1px solid var(--border)",
                   }}
                 >
+                  <div className="pt-6 grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))] border-t border-border">
                   <div>
                     <div
                       style={{
@@ -425,12 +494,14 @@ export default async function Page({
                       }}
                       className="text-foreground"
                     >
+                    <div className="text-xs opacity-60 mb-1 text-foreground">
                       Luftfuktighet
                     </div>
                     <div
                       style={{ fontSize: "20px", fontWeight: "600" }}
                       className="text-primary"
                     >
+                    <div className="text-xl font-semibold text-primary">
                       💧 {weather.timeseries[0].humidity}%
                     </div>
                   </div>
@@ -443,12 +514,14 @@ export default async function Page({
                       }}
                       className="text-foreground"
                     >
+                    <div className="text-xs opacity-60 mb-1 text-foreground">
                       Lufttryck
                     </div>
                     <div
                       style={{ fontSize: "20px", fontWeight: "600" }}
                       className="text-primary"
                     >
+                    <div className="text-xl font-semibold text-primary">
                       🌡️ {weather.timeseries[0].airPressure} hPa
                     </div>
                   </div>
@@ -461,6 +534,7 @@ export default async function Page({
                       }}
                       className="text-foreground"
                     >
+                    <div className="text-xs opacity-60 mb-1 text-foreground">
                       Sikt
                     </div>
                     <div
@@ -469,6 +543,8 @@ export default async function Page({
                     >
                       👁️ {(weather.timeseries[0].visibility / 1000).toFixed(1)}{" "}
                       km
+                    <div className="text-xl font-semibold text-primary">
+                      👁️ {(weather.timeseries[0].visibility / 1000).toFixed(1)} km
                     </div>
                   </div>
                   <div>
@@ -480,6 +556,7 @@ export default async function Page({
                       }}
                       className="text-foreground"
                     >
+                    <div className="text-xs opacity-60 mb-1 text-foreground">
                       Molntäcke
                     </div>
                     <div
@@ -488,6 +565,8 @@ export default async function Page({
                     >
                       {getCloudCoverIcon(weather.timeseries[0].cloudCover)}{" "}
                       {weather.timeseries[0].cloudCover}%
+                    <div className="text-xl font-semibold text-primary">
+                      {getCloudCoverIcon(weather.timeseries[0].cloudCover)} {weather.timeseries[0].cloudCover}%
                     </div>
                   </div>
                 </div>
@@ -502,10 +581,30 @@ export default async function Page({
                 }}
               >
                 {weather.timeseries.slice(0, 6).map((s, i) => (
+            {/* Weather Cards Grid */}
+              <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
+              {weather.timeseries.slice(0, 6).map((s, i) => (
+                <div
+                  key={i}
+                  className="relative overflow-hidden bg-card rounded-md p-5 border border-border shadow-md"
+                >
+                  {/* Decorative accent */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-secondary" />
+
+                  <div className="text-[13px] opacity-60 mb-3 font-medium text-foreground">
+                    {formatDateTimeShort(s.validTime)}
+                  </div>
+
                   <div
                     key={i}
                     style={{ position: "relative", overflow: "hidden" }}
                     className="bg-card rounded-md p-5 border border-border shadow-md"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: "16px",
+                    }}
                   >
                     {/* Decorative accent */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-secondary" />
@@ -520,7 +619,15 @@ export default async function Page({
                       className="text-foreground"
                     >
                       {formatDateTimeShort(s.validTime)}
+                    <div className="text-[42px] font-bold leading-none text-primary">
+                      {s.temp}°C
                     </div>
+                    <div className="bg-secondary p-2 px-3 rounded-md text-[13px] font-semibold" aria-hidden="false" title={translateSummary(s.summary)}>
+                      <span role="img" aria-label={translateSummary(s.summary)}>
+                        {getWeatherEmoji(s.summary)}
+                      </span>
+                    </div>
+                  </div>
 
                     <div
                       style={{
@@ -539,6 +646,11 @@ export default async function Page({
                         className="text-primary"
                       >
                         {s.temp}°C
+                  {/* Wind and Precipitation */}
+                  <div className="grid grid-cols-2 gap-3 pb-3 mb-3 border-b border-border">
+                    <div>
+                      <div className="text-xs opacity-60 mb-1 text-foreground">
+                        Vind
                       </div>
                       <div
                         className="bg-secondary"
@@ -557,6 +669,11 @@ export default async function Page({
                         >
                           {getWeatherEmoji(s.summary)}
                         </span>
+                      <div className="text-[15px] font-semibold text-foreground">
+                        {s.windSpeed} m/s {getWindDirection(s.windDirection)}
+                      </div>
+                      <div className="text-xs opacity-60 text-foreground">
+                        Vindbyar: {s.windGust} m/s
                       </div>
                     </div>
 
@@ -594,6 +711,9 @@ export default async function Page({
                         >
                           Vindbyar: {s.windGust} m/s
                         </div>
+                    <div>
+                      <div className="text-xs opacity-60 mb-1 text-foreground">
+                        Nederbörd
                       </div>
                       <div>
                         <div
@@ -618,8 +738,14 @@ export default async function Page({
                         >
                           {s.precipitationCategory}
                         </div>
+                      <div className="text-[15px] font-semibold text-foreground">
+                        {s.precipitationMean} mm
+                      </div>
+                      <div className="text-xs opacity-60 text-foreground">
+                        {s.precipitationCategory}
                       </div>
                     </div>
+                  </div>
 
                     {/* Additional Details */}
                     <div
@@ -641,6 +767,23 @@ export default async function Page({
                           className="text-foreground"
                         >
                           Luftfuktighet:
+                  {/* Additional Details */}
+                  <div
+                    className="grid grid-cols-2 gap-2 text-[13px]"
+                  >
+                    <div className="flex justify-between">
+                      <span className="opacity-60 text-foreground">Luftfuktighet:</span>
+                      <span className="font-semibold text-foreground">{s.humidity}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="opacity-60 text-foreground">Molntäcke:</span>
+                      <span className="font-semibold text-foreground">{s.cloudCover}%</span>
+                    </div>
+                    {s.thunderProbability > 0 && (
+                      <div className={`${getThunderRiskLevel(s.thunderProbability).bgClass} p-2 rounded-md flex justify-between items-center`} style={{ gridColumn: "1 / -1" }}>
+                        <span style={{ opacity: 0.8 }} className="text-foreground">⚡ Åskerisk:</span>
+                        <span className={`${getThunderRiskLevel(s.thunderProbability).textClass} font-semibold`}>
+                          {getThunderRiskLevel(s.thunderProbability).text} ({s.thunderProbability}%)
                         </span>
                         <span
                           style={{ fontWeight: "600" }}
@@ -688,9 +831,13 @@ export default async function Page({
                         </div>
                       )}
                     </div>
+                    )}
                   </div>
                 ))}
               </div>
+                </div>
+              ))}
+            </div>
 
               {/* Ny: 10-dagarsprognos - temperatur vid kl. 12 + kommentar */}
               {tenDayMidday.length > 0 && (
@@ -705,6 +852,12 @@ export default async function Page({
                   >
                     10-dagarsprognos — temperatur vid kl. 12
                   </h3>
+            {/* Ny: 10-dagarsprognos - temperatur vid kl. 12 + kommentar */}
+            {tenDayMidday.length > 0 && (
+              <div className="mt-5">
+                <h3 className="mb-3 text-xl font-bold text-primary">
+                  10-dagarsprognos — temperatur vid kl. 12
+                </h3>
 
                   {/* Lista: designad på samma sätt som morgonrapporten */}
                   <div
@@ -746,10 +899,22 @@ export default async function Page({
                               {formatTime(s.validTime)}
                             </div>
                           </div>
+                {/* Lista: designad på samma sätt som morgonrapporten */}
+                <div className="mt-2 flex flex-col gap-3">
+                  {tenDayMidday.map((s: Series, idx: number) => {
+                    return (
+                      <div key={idx} className="flex items-center gap-4 rounded-md border border-border bg-card p-4 shadow-sm">
+                        <div className="flex flex-col gap-1">
+                          <div className="text-[13px] opacity-80 text-foreground">{formatDateShort(s.validTime)}</div>
+                          <div className="text-xs opacity-70 text-foreground">{formatTime(s.validTime)}</div>
+                        </div>
 
                           <div style={{ fontSize: 48, lineHeight: 1 }}>
                             {getWeatherEmoji(s.summary)}
                           </div>
+                        <div className="text-5xl leading-none">
+                          {getWeatherEmoji(s.summary)}
+                        </div>
 
                           <div
                             style={{ display: "flex", flexDirection: "column" }}
@@ -770,7 +935,14 @@ export default async function Page({
                             >
                               {translateSummary(s.summary)}
                             </div>
+                        <div className="flex flex-col">
+                          <div className="mb-1 text-2xl font-bold text-primary">
+                            {typeof s.temp === "number" ? `${s.temp}°C` : "—"}
                           </div>
+                          <div className="text-sm opacity-85 text-foreground">
+                            {translateSummary(s.summary)}
+                          </div>
+                        </div>
 
                           <div
                             style={{
@@ -806,11 +978,22 @@ export default async function Page({
                                 summary={translateSummary(s.summary)}
                               />
                             </div>
+                        <div
+                          className="ml-auto flex flex-col gap-1.5 text-right"
+                        >
+                          <div className="text-xs opacity-70 text-foreground">Känns som</div>
+                          <div className="text-sm font-semibold text-foreground">{typeof s.temp === "number" ? `${s.temp}°C` : "—"}</div>
+                          <div className="text-[13px] opacity-85 text-foreground">Nederbörd: <strong>{s.precipitationMean ?? "—"} mm</strong></div>
+                          <div>
+                            <WeatherComment temp={s.temp} summary={translateSummary(s.summary)} />
                           </div>
                         </div>
                       );
                     })}
                   </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </section>
@@ -818,6 +1001,13 @@ export default async function Page({
         </main>
         <Footer />
       </div>
+              </div>
+            )}
+          </section>
+        )}
+      </main>
+      <Footer />
     </div>
+  </div>
   );
 }
