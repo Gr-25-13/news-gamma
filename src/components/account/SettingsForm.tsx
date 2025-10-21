@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { User, Mail, Lock, Phone, MapPin, Settings } from "lucide-react";
@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { authClient } from "@/lib/auth-client";
 
 type GeneralValues = {
   firstname: string;
@@ -29,54 +30,90 @@ type EmailValues = {
 };
 
 type PasswordValues = {
+  currentPassword?: string;
   password: string;
   confirmPassword: string;
 };
 
 export default function SettingsForm(): React.ReactElement {
+  const { data: session } = authClient.useSession();
+
   const generalForm = useForm<GeneralValues>({
-    defaultValues: {
-      firstname: "Anna",
-      lastname: "Svensson",
-      street: "Storgatan 1",
-      city: "Stockholm",
-      phone: "+46 70 123 45 67",
-      zip: "12345",
-    },
     mode: "onTouched",
   });
 
   const emailForm = useForm<EmailValues>({
-    defaultValues: {
-      email: "anna@example.com",
-      confirmEmail: "anna@example.com",
-    },
     mode: "onTouched",
   });
 
   const passwordForm = useForm<PasswordValues>({
     defaultValues: {
+      currentPassword: "",
       password: "",
       confirmPassword: "",
     },
     mode: "onTouched",
   });
 
-  function onSubmitGeneral(data: GeneralValues) {
-    console.log("Spara allmän info (frontend-only):", data);
-    alert("Allmän info sparad (frontend-only)");
+  React.useEffect(() => {
+    if (session?.user) {
+      const [firstname, ...lastnameParts] = session.user.name?.split(" ") || [
+        "",
+        "",
+      ];
+      generalForm.reset({
+        firstname: firstname,
+        lastname: lastnameParts.join(" "),
+        // Fyll på med riktig data från databasen när den finns
+        street: "",
+        city: "",
+        phone: "",
+        zip: "",
+      });
+      emailForm.reset({
+        email: session.user.email,
+        confirmEmail: session.user.email,
+      });
+    }
+  }, [session, generalForm, emailForm]);
+
+  async function onSubmitGeneral(data: GeneralValues) {
+    try {
+      await authClient.updateUser({
+        name: `${data.firstname} ${data.lastname}`,
+        // Lägg till andra fält som ska uppdateras här
+      });
+      alert("Profilen har uppdaterats!");
+    } catch (error: any) {
+      alert("Fel vid uppdatering: " + error.message);
+    }
   }
 
-  function onSubmitEmail(data: EmailValues) {
-    console.log("Byt e-post (frontend-only):", data);
-    alert(`E-post uppdaterad till ${data.email} (frontend-only)`);
-    emailForm.reset({ email: data.email, confirmEmail: data.email });
+  async function onSubmitEmail(data: EmailValues) {
+    try {
+      await authClient.changeEmail({ newEmail: data.email });
+      alert("En verifieringslänk har skickats till din gamla e-postadress.");
+    } catch (error: any) {
+      alert("Fel vid byte av e-post: " + error.message);
+    }
   }
 
-  function onSubmitPassword(data: PasswordValues) {
-    console.log("Byt lösenord (frontend-only):", data);
-    alert("Lösenord uppdaterat (frontend-only)");
-    passwordForm.reset();
+  async function onSubmitPassword(data: PasswordValues) {
+    try {
+      if (!data.currentPassword) {
+        alert("Du måste ange ditt nuvarande lösenord.");
+        return;
+      }
+
+      await authClient.changePassword({
+        currentPassword: data.currentPassword,
+        newPassword: data.password,
+      });
+      alert("Lösenordet har uppdaterats!");
+      passwordForm.reset();
+    } catch (error: any) {
+      alert(`Fel vid byte av lösenord: ${error.message}`);
+    }
   }
 
   return (
@@ -184,7 +221,14 @@ export default function SettingsForm(): React.ReactElement {
             />
 
             <div className="md:col-span-2 flex items-center gap-3">
-              <Button type="submit">Spara profil</Button>
+              <Button
+                type="submit"
+                disabled={generalForm.formState.isSubmitting}
+              >
+                {generalForm.formState.isSubmitting
+                  ? "Sparar..."
+                  : "Spara profil"}
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => generalForm.reset()}
@@ -248,7 +292,11 @@ export default function SettingsForm(): React.ReactElement {
             />
 
             <div className="md:col-span-2 flex items-center gap-3">
-              <Button type="submit">Uppdatera e-post</Button>
+              <Button type="submit" disabled={emailForm.formState.isSubmitting}>
+                {emailForm.formState.isSubmitting
+                  ? "Uppdaterar..."
+                  : "Uppdatera e-post"}
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => emailForm.reset()}
@@ -271,6 +319,22 @@ export default function SettingsForm(): React.ReactElement {
             onSubmit={passwordForm.handleSubmit(onSubmitPassword)}
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
+            <FormField
+              control={passwordForm.control}
+              name="currentPassword"
+              rules={{ required: "Nuvarande lösenord krävs" }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nuvarande lösenord</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="hidden md:block"></div>
+
             <FormField
               control={passwordForm.control}
               name="password"
@@ -316,7 +380,14 @@ export default function SettingsForm(): React.ReactElement {
             />
 
             <div className="md:col-span-2 flex items-center gap-3">
-              <Button type="submit">Byt lösenord</Button>
+              <Button
+                type="submit"
+                disabled={passwordForm.formState.isSubmitting}
+              >
+                {passwordForm.formState.isSubmitting
+                  ? "Byter lösenord..."
+                  : "Byt lösenord"}
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => passwordForm.reset()}

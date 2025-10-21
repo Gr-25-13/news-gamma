@@ -24,10 +24,10 @@ export async function createArticle(values: ArticleValues) {
             content: data.content,
             image_url: data.image_url,
             editorsChoice: data.editorsChoice,
-            category: {
-                create: {
-                    name: data.category
-                }
+            categories: {
+  create: [{ name: data.category }]
+}
+
             },
 
         }

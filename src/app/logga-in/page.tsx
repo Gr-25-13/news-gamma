@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Aside } from "@/components/layout/aside";
 import LoginForm from "@/components/Forms/LoginForm";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage(): React.ReactElement {
   const router = useRouter();
@@ -13,10 +14,20 @@ export default function LoginPage(): React.ReactElement {
   const message = searchParams?.get("message");
 
   type FormData = { email: string; password: string };
-  function onSubmit(data: FormData) {
-    // replace this with real auth logic
-    console.log("login:", data);
-    router.push("/installningar");
+  async function onSubmit(data: FormData): Promise<void> {
+    const callbackUrl = searchParams?.get("callbackUrl") || "/";
+
+    try {
+      const { error } = await authClient.signIn.email(data, {
+        onSuccess: () => {
+          router.push(callbackUrl);
+        },
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      console.error("Inloggningsfel:", error);
+      alert("Fel vid inloggning: " + (error.message ?? "Okänt fel"));
+    }
   }
 
   return (

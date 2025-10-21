@@ -14,6 +14,7 @@ export async function middleware(req: NextRequest) {
       "message",
       "Du måste logga in för att se den här sidan."
     );
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
 

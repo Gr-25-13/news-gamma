@@ -4,15 +4,12 @@
 // Meddela teamet vid ändringar av cookie-namn eller sessionstider
 
 import { betterAuth } from "better-auth";
-import { Postgres } from "@prisma/adapter-pg";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma"; // ← ÄNDRAT: Importera från prisma.ts
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
-    // @ts-expect-error
-    adapter: Postgres,
   }),
   emailAndPassword: {
     enabled: true,
