@@ -2,7 +2,7 @@ import Image from "next/image";
 export type UserDataProps = {
     name: string;
     email: string;
-    image: unknown;
+    //image: unknown;
     time: string;
 }
 
@@ -12,7 +12,7 @@ export default function UserDataCard(props: UserDataProps) {
         <div className="flex flex-wrap justify-between gap-3">
             <section className="flex justify-between gap-3">
                 <div className="h-12 w-12rounded-full">
-                    <Image width={300} height={300} src={props.image || defaultImage}
+                    <Image width={300} height={300} src={defaultImage}//props.image ||
                         alt="avatar" className="rounded-full h-12 w-12"></Image>
                 </div>
                 <div className="text-sm">

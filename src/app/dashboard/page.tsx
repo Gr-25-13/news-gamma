@@ -79,11 +79,11 @@ export default async function Dashboard() {
         take: 7
     })
     const UserData: UserDataProps[] = recentUsers.map((account: {
-        name: string; email: string; image: unknown; createdAt: Date;
+        name: string; email: string; /*image: unknown;*/ createdAt: Date;
     }) => ({
         name: account.name || 'Unknown',
         email: account.email || 'Unknown',
-        image: account.image || "/images/user-icon.jpg",
+        // image: account.image || "/images/user-icon.jpg",
         time: formatDistanceToNow(new Date(account.createdAt), { addSuffix: true }),
     }))
 
@@ -160,11 +160,11 @@ export default async function Dashboard() {
             name: purchase.user?.name || 'Unknown',
             email: purchase.user?.email || 'Unknown',
             paid: purchase.paid ? 'Paid' : 'Unpaid',
-            //image: purchase.user?. || "/images/user-icon.jpg",
+            //image: purchase.user?. || "/images/user-icon.jpg",_count
 
         }))
     )
-    const goalAmount = 1000;
+    const goalAmount = 5000;
     const goalProgress = totalProfitPremium / goalAmount * 100;
 
     return (
@@ -209,7 +209,7 @@ export default async function Dashboard() {
                                 <UserDataCard
                                     key={index}
                                     name={data.name}
-                                    image={data.image}
+                                    //image={data.image}
                                     email={data.email}
                                     time={data.time}>
                                 </UserDataCard>
