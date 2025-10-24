@@ -2,8 +2,9 @@ import { Target } from "lucide-react";
 import { Progress } from "@/components/ui/progress"
 
 export type GoalProps = {
+    bar: number
+    goal: number
     value: number
-    goal: number;
 }
 export default function GoalDataCard(props: GoalProps) {
     return (
@@ -15,11 +16,11 @@ export default function GoalDataCard(props: GoalProps) {
             <div className="gap-3 pt-2">
                 <section className="flex justify-between gap-3">
                     <div className="w-full rounded-full">
-                        <Progress value={props.value} className="border border-black/10 bg-slate-100/20 h-2"></Progress>
+                        <Progress value={props.bar} className="border border-black/10 bg-slate-100/20 h-2"></Progress>
                     </div>
                 </section>
                 <div className="flex justify-between text-sm opacity-50 pt-3">
-                    <p>{Math.round(props.value) * 10} Kr</p>
+                    <p>{props.value} Kr</p>
                     <p>Mål: {props.goal} Kr</p>
                 </div>
 

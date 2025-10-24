@@ -17,6 +17,8 @@ export default async function Dashboard() {
     //Total subscriptions
     const subscriptionCount = await db.subscription.count();
 
+
+
     //Premium subscription
     const premium = await db.subscriptionType.findUnique({
         where: { name: 'premium' },
@@ -27,6 +29,7 @@ export default async function Dashboard() {
         },
     })
     const totalProfitPremium = premium ? premium.price * premium.subscriptions.length : 0 || 0
+    console.log("totalProfitPremium", totalProfitPremium)
 
 
     const lastYearStart = startOfYear(subYears(new Date(), 1))
@@ -164,8 +167,9 @@ export default async function Dashboard() {
 
         }))
     )
+
     const goalAmount = 5000;
-    const goalProgress = totalProfitPremium / goalAmount * 100;
+    const goalProgress = totalProfitPremium / goalAmount * 100
 
     return (
         <div className="flex flex-col gap-5 w-full">
@@ -236,7 +240,7 @@ export default async function Dashboard() {
                         <BarChart data={monthlyUsersData}></BarChart>
                         <LineGraph data={monthlyRevenueData} />
                     </section>
-                    <GoalDataCard goal={goalAmount} value={goalProgress} />
+                    <GoalDataCard goal={goalAmount} value={totalProfitPremium} bar={goalProgress} />
                 </div>
             </div>
         </div>
