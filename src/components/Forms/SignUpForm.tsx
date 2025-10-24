@@ -1,13 +1,11 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SignUpSchema, type SignUpInput } from "@/lib/schemas/auth";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -17,17 +15,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpSchema, type SignUpInput } from "@/lib/schemas/auth";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Loader2, AlertCircle } from "lucide-react";
 
 type FormValues = SignUpInput;
 
 export default function SignUpForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(SignUpSchema),
@@ -35,133 +32,171 @@ export default function SignUpForm({ onSuccess }: { onSuccess?: () => void }) {
   });
 
   async function onSubmit(values: FormValues) {
-    const res = await authClient.signUp.email({
+    console.log("[SignUp] Form submitted with:", {
       name: values.name,
       email: values.email,
-      password: values.password,
     });
 
-    // Debug: log full response from Better Auth so we can see validation details
-    console.log("[SignUp] response:", res);
-    if (res.error) {
-      // Better-auth may return an Error-like object whose properties are non-enumerable.
-      // Log non-enumerable properties and a dir view so we can see message/stack.
-      try {
-        console.error("SignUp error (dir):");
-        console.dir(res.error);
-        console.error("SignUp error keys:", Object.getOwnPropertyNames(res.error));
-        try {
-          // Try to stringify known properties
-          const ser = JSON.stringify(res.error, Object.getOwnPropertyNames(res.error));
-          console.error("SignUp error (serialized):", ser);
-        } catch (serErr) {
-          console.error("SignUp error: couldn't serialize error", serErr);
-        }
-      } catch (logErr) {
-        console.error("SignUp error: logging failure", logErr);
-        console.error(res.error);
-      }
-      // If the error object is empty ({}), do a raw fetch to capture the HTTP status and body
-      if (Object.keys(res.error).length === 0) {
-        try {
-          const raw = await fetch('/api/auth/sign-up/email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: values.name, email: values.email, password: values.password }),
-          });
+    setError(null); // Rensa tidigare fel
+    setLoading(true);
 
-          const text = await raw.text();
-          let parsed;
-          try { parsed = JSON.parse(text); } catch { parsed = text; }
+    try {
+      console.log("[SignUp] Calling authClient.signUp.email...");
 
-          console.error('[SignUp][raw fetch] status:', raw.status, 'body:', parsed);
-          toast.error(`Registration failed (status ${raw.status}). Se konsol för detaljer.`);
-        } catch (fetchErr) {
-          console.error('[SignUp][raw fetch] error:', fetchErr);
-          toast.error('Kunde inte nå auth-endpoint för felsökning.');
+      const res = await authClient.signUp.email({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
+
+      console.log("[SignUp] response:", res);
+
+      if (res.error) {
+        console.error("[SignUp] Error:", res.error);
+
+        // Hantera specifika felkoder
+        if (
+          res.error.code === "USER_ALREADY_EXISTS" ||
+          res.error.message?.toLowerCase().includes("existing email") ||
+          res.error.message?.toLowerCase().includes("already exists")
+        ) {
+          setError(
+            "Denna e-postadress används redan. Vänligen använd en annan e-postadress eller logga in om du redan har ett konto."
+          );
+        } else {
+          setError(res.error?.message || "Kunde inte skapa konto");
         }
-      } else {
-        toast.error(res.error?.message || "Kunde inte skapa konto");
+        setLoading(false);
+        return;
       }
-    } else {
+
+      console.log("[SignUp] Success!");
+      toast.success(
+        "Konto skapat! Kontrollera din e-post för verifieringslänk."
+      );
+      router.push("/logga-in?message=check-email");
       onSuccess?.();
-      toast.success("Konto skapat");
-      // After successful registration, navigate user to the login page
-      router.push('/logga-in');
+    } catch (err) {
+      console.error("[SignUp] Caught error:", err);
+      setError("Ett oväntat fel inträffade. Försök igen.");
+      setLoading(false);
     }
   }
 
   return (
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Registrera</CardTitle>
-        <CardDescription>Fyll i nedan för att skapa ett konto</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Namn</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Error Alert - Synlig felruta */}
+        {error && (
+          <Alert variant="destructive" className="border-2 shadow-lg">
+            <AlertCircle className="h-5 w-5" />
+            <AlertTitle className="font-semibold text-lg">
+              Registrering misslyckades
+            </AlertTitle>
+            <AlertDescription className="text-base mt-2">
+              {error}
+            </AlertDescription>
+          </Alert>
+        )}
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-post</FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base font-medium">Namn</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Ditt namn"
+                  {...field}
+                  disabled={loading}
+                  className="h-12 text-base border-2 rounded-xl"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lösenord</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base font-medium">
+                E-postadress
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="din@email.se"
+                  {...field}
+                  disabled={loading}
+                  className="h-12 text-base border-2 rounded-xl"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="confirmPass"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bekräfta lösenord</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base font-medium">Lösenord</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Minst 8 tecken"
+                  {...field}
+                  disabled={loading}
+                  className="h-12 text-base border-2 rounded-xl"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <Button type="submit" className="w-auto bg-primary text-primary-foreground hover:bg-primary/90">
-              {form.formState.isSubmitting ? "Skapar konto..." : "Skapa konto"}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+        <FormField
+          control={form.control}
+          name="confirmPass"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-base font-medium">
+                Bekräfta lösenord
+              </FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Upprepa lösenordet"
+                  {...field}
+                  disabled={loading}
+                  className="h-12 text-base border-2 rounded-xl"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full h-12 text-base font-semibold rounded-xl"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+              Skapar konto...
+            </>
+          ) : (
+            "Skapa konto"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }
