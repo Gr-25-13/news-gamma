@@ -7,13 +7,14 @@ import { useState, useRef } from "react";
 import { generateNews } from "./ai";
 
 import { MDXEditor, MDXEditorMethods } from "@mdxeditor/editor";
+import { saveArticle } from "@/app/actions/articles-ai";
 
 export default function CreateArticle() {
   const refSummary = useRef<MDXEditorMethods>(null);
   const refContent = useRef<MDXEditorMethods>(null);
 
   const [topic, setTopic] = useState("");
-  const [header, setHeader] = useState("");
+  const [headLine, setHeadLine] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
 
@@ -43,7 +44,7 @@ export default function CreateArticle() {
               className="ml-2 px-4 py-2 rounded bg-primary text-primary-foreground hover:opacity-95"
               onClick={async () => {
                 const article = await generateNews(topic);
-                setHeader(article.header);
+                setHeadLine(article.header);
                 setSummary(article.summary);
                 setContent(article.content);
                 refSummary.current?.setMarkdown(article.summary);
@@ -68,8 +69,8 @@ export default function CreateArticle() {
             </label>
             <Input
               id="header"
-              value={header}
-              onChange={(e) => setHeader(e.target.value)}
+              value={headLine}
+              onChange={(e) => setHeadLine(e.target.value)}
               className="bg-surface border border-muted text-foreground"
             />
           </div>
@@ -106,7 +107,7 @@ export default function CreateArticle() {
         </CardHeader>
         <CardContent>
           <h2 className="text-xl font-semibold text-foreground">
-            {header || "No header yet"}
+            {headLine || "No headLine yet"}
           </h2>
           <div className="mt-4 text-muted-foreground">
             <h3 className="font-medium">Summary</h3>
@@ -123,6 +124,21 @@ export default function CreateArticle() {
                 __html: content || "<em>No content</em>",
               }}
             />
+          </div>
+          <div className="mt-6">
+            <Button
+              className="bg-green-600 text-white hover:bg-green-700"
+              onClick={async () => {
+                try {
+                  await saveArticle({ headLine, summary, content });
+                  alert("Article saved successfully");
+                } catch (error) {
+                  alert("Error saving article: " + (error as Error).message);
+                }
+              }}
+            >
+              Save Article to Database
+            </Button>
           </div>
         </CardContent>
       </Card>
