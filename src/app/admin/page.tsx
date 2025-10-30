@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { requireAdmin } from "@/lib/server-auth";
 import ArticleAIPage from "./artiklar-ai/page";
 
+
 export default async function AdminPage() {
   await requireAdmin();
 
