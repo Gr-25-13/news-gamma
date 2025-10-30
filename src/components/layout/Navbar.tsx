@@ -117,7 +117,14 @@ export function Navbar(): React.ReactElement {
                   >
                     Mina sidor
                   </Link>
-                  {activeSubscription?.status === "active" ? null : (
+                  {activeSubscription?.status === "active" ? (
+                    <Button
+                      onClick={async () => {
+                        await authClient.subscription.cancel({
+                          returnUrl: "/"
+                        })
+                      }}
+                    >Unsubscribe</Button>) : (
                     <Button
                       onClick={async () => {
                         await authClient.subscription.upgrade({
