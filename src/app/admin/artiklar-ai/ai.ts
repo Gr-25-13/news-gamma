@@ -19,7 +19,7 @@ export async function generateNews(topic: string) {
     the content should be written in markdown.`,
 
     schema: z.object({
-      header: z.string(),
+      headerLine: z.string(),
       summary: z.string(),
       content: z.string(),
     }),

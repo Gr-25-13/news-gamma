@@ -5,10 +5,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useRef } from "react";
 import { generateNews } from "./ai";
-
-import { MDXEditor, MDXEditorMethods } from "@mdxeditor/editor";
-import { saveArticle } from "@/app/actions/articles-ai";
-
+import { 
+BlockTypeSelect,
+BoldItalicUnderlineToggles, 
+headingsPlugin,
+InsertTable, 
+linkDialogPlugin, 
+linkPlugin, 
+listsPlugin, 
+ListsToggle, 
+MDXEditor,
+MDXEditorMethods,
+quotePlugin, 
+tablePlugin, 
+thematicBreakPlugin,
+toolbarPlugin, 
+UndoRedo
+ } from "@mdxeditor/editor";
+ import "@mdxeditor/editor/style.css";
+import { saveArticle } from "./actions/articles-ai";
+ 
 export default function CreateArticle() {
   const refSummary = useRef<MDXEditorMethods>(null);
   const refContent = useRef<MDXEditorMethods>(null);
@@ -44,7 +60,7 @@ export default function CreateArticle() {
               className="ml-2 px-4 py-2 rounded bg-primary text-primary-foreground hover:opacity-95"
               onClick={async () => {
                 const article = await generateNews(topic);
-                setHeadLine(article.header);
+                setHeadLine(article.headerLine);
                 setSummary(article.summary);
                 setContent(article.content);
                 refSummary.current?.setMarkdown(article.summary);
@@ -77,12 +93,33 @@ export default function CreateArticle() {
 
           <div className="space-y-2">
             <label className="text-sm text-muted-foreground">Summary</label>
-            <div className="rounded-md border border-muted p-2 bg-surface">
+            <div className="text-white rounded-md border border-muted p-2 bg-surface">
               <MDXEditor
                 ref={refSummary}
                 markdown={summary}
                 onChange={setSummary}
+                contentEditableClassName="prose prose-slate"
                 className="min-h-[120px] prose max-w-none text-foreground bg-transparent"
+                plugins={[
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  tablePlugin(),
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <BoldItalicUnderlineToggles />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <InsertTable />
+                      </>
+                    ),
+                  }),
+                ]}
               />
             </div>
           </div>
@@ -95,6 +132,26 @@ export default function CreateArticle() {
                 markdown={content}
                 onChange={setContent}
                 className="min-h-[220px] prose max-w-none text-foreground bg-transparent"
+                plugins={[
+                  headingsPlugin(),
+                  listsPlugin(),
+                  quotePlugin(),
+                  thematicBreakPlugin(),
+                  linkPlugin(),
+                  linkDialogPlugin(),
+                  tablePlugin(),
+                  toolbarPlugin({
+                    toolbarContents: () => (
+                      <>
+                        <UndoRedo />
+                        <BoldItalicUnderlineToggles />
+                        <BlockTypeSelect />
+                        <ListsToggle />
+                        <InsertTable />
+                      </>
+                    ),
+                  }),
+                ]}
               />
             </div>
           </div>
@@ -130,7 +187,7 @@ export default function CreateArticle() {
               className="bg-green-600 text-white hover:bg-green-700"
               onClick={async () => {
                 try {
-                  await saveArticle({ headLine, summary, content });
+                  await saveArticle({ headLine, summary, content, category: "1", author: "1"  });
                   alert("Article saved successfully");
                 } catch (error) {
                   alert("Error saving article: " + (error as Error).message);

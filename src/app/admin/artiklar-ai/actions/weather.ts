@@ -1,6 +1,6 @@
 "use server";
 
-import { WeatherType } from "../types/weather-types";
+import { WeatherType } from "../../../types/weather-types";
 
 export async function getWeatherByLocation(
   location: string
@@ -12,7 +12,11 @@ export async function getWeatherByLocation(
     );
     if (!respone.ok) {
       const txt = await respone.text();
-      console.log("getWeatherByLocation: non-ok response", respone.status, txt.slice?.(0, 300) ?? txt);
+      console.log(
+        "getWeatherByLocation: non-ok response",
+        respone.status,
+        txt.slice?.(0, 300) ?? txt
+      );
       return null;
     }
 
@@ -23,7 +27,10 @@ export async function getWeatherByLocation(
       try {
         return JSON.parse(txt);
       } catch {
-        console.log("getWeatherByLocation: expected JSON but got:", txt.slice?.(0, 500) ?? txt);
+        console.log(
+          "getWeatherByLocation: expected JSON but got:",
+          txt.slice?.(0, 500) ?? txt
+        );
         return null;
       }
     }
