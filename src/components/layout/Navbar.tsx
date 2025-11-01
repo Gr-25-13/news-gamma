@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from 'next/image';
 import React, { useState, useEffect } from "react";
 import { ModeToggle } from "../Buttons/toggle-theme-button";
 import { Button } from "@/components/ui/button";
@@ -15,8 +16,21 @@ export function Navbar(): React.ReactElement {
   const isAuthenticated = !!session?.user;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [categories, setCategories] = useState<NavCategory[]>([]);
+  // Shared style for auth / action buttons so they have equal size
+  const actionStyle: React.CSSProperties = {
+    backgroundColor: 'var(--chart-4)',
+    color: 'var(--secondary-foreground)',
+    padding: '0.5rem 0.75rem',
+    borderRadius: '0.375rem',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: '130px',
+    height: '44px',
+    fontSize: '1.125rem',
+  };
   const [loadingCategories, setLoadingCategories] = useState(true);
-  const [subscriptions, setSubscription] = useState<any[]>([]);
+  const [subscriptions, setSubscription] = useState<Array<{ status?: string }>>([]);
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -62,19 +76,20 @@ export function Navbar(): React.ReactElement {
 
   return (
     <>
-      <header className="bg-card shadow-md sticky top-0 z-50">
+  <header className="shadow-md sticky top-0 z-50" style={{ backgroundColor: 'var(--secondary)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
             {/* Logo och Titel-sektion */}
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="flex flex-col">
-                <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-                  Dagens Dos
-                </h1>
-                <p className="text-sm italic text-muted-foreground mt-1">
-                  Sanningen gör ont, här får du en bedövning.
-                </p>
-              </div>
+              <Link href="/" className="flex items-center space-x-3">
+                <Image
+                  src="/loggo.png"
+                  alt="Dagens Dos logotyp"
+                  width={100}
+                  height={100}
+                  className="rounded"
+                  priority
+                />
+             
             </Link>
 
             {/* Huvudnavigering (Desktop) - categories from API */}
@@ -86,7 +101,8 @@ export function Navbar(): React.ReactElement {
                   <Link
                     key={cat.id}
                     href={`/kategori/${cat.id}`}
-                    className="whitespace-nowrap text-base font-medium text-muted-foreground hover:text-primary"
+                    className="whitespace-nowrap text-lg font-medium"
+                    style={{ color: 'var(--secondary-foreground)' }}
                   >
                     {cat.name}
                   </Link>
@@ -94,27 +110,21 @@ export function Navbar(): React.ReactElement {
               )}
             </nav>
 
-            <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-3">
+            <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 gap-4">
               <ModeToggle />
 
               {!isAuthenticated ? (
                 <>
-                  <Link
-                    href="/logga-in"
-                    className="whitespace-nowrap text-base font-medium text-foreground hover:text-primary"
-                  >
-                    Logga in
-                  </Link>
-                  <Button asChild variant="default">
-                    <Link href="/registrera">Registrera</Link>
-                  </Button>
+                        <Link href="/logga-in" className="whitespace-nowrap text-lg font-medium" style={actionStyle}>
+                          Logga in
+                        </Link>
+                        <Link href="/registrera" className="whitespace-nowrap text-lg font-medium" style={actionStyle}>
+                          Registrera
+                        </Link>
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/mina-sidor"
-                    className="whitespace-nowrap text-base font-medium text-primary hover:underline"
-                  >
+                  <Link href="/mina-sidor" className="whitespace-nowrap text-lg font-medium" style={actionStyle}>
                     Mina sidor
                   </Link>
                   {activeSubscription?.status === "active" ? (
@@ -124,7 +134,12 @@ export function Navbar(): React.ReactElement {
                           returnUrl: "/"
                         })
                       }}
-                    >Unsubscribe</Button>) : (
+                      style={actionStyle}
+                      className="px-4 py-2"
+                    >
+                      Avsluta
+                    </Button>
+                  ) : (
                     <Button
                       onClick={async () => {
                         await authClient.subscription.upgrade({
@@ -133,12 +148,12 @@ export function Navbar(): React.ReactElement {
                           cancelUrl: "/"
                         })
                       }}
-                    >Subscribe</Button>)}
-                  <Button
-                    variant="outline"
-                    onClick={handleLogout}
-                    className="ml-2"
-                  >
+                      className="px-4 py-2 text-lg"
+                    >
+                      Prenumerera
+                    </Button>
+                  )}
+                  <Button variant="outline" onClick={handleLogout} style={{ minWidth: actionStyle.minWidth, height: actionStyle.height, fontSize: actionStyle.fontSize }}>
                     Logga ut
                   </Button>
                 </>
@@ -153,7 +168,7 @@ export function Navbar(): React.ReactElement {
                   aria-expanded={mobileOpen}
                   aria-controls="mobile-menu"
                   onClick={() => setMobileOpen((s) => !s)}
-                  className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50"
+                  className="flex items-center gap-3 p-2 rounded-md hover:bg-muted"
                 >
                   {mobileOpen ? (
                     /* Stäng-ikon */
@@ -194,62 +209,48 @@ export function Navbar(): React.ReactElement {
                 {mobileOpen && (
                   <nav
                     id="mobile-menu"
-                    className="mt-2 bg-card rounded-md p-4 shadow-lg space-y-3 w-full max-h-[80vh] overflow-auto z-50"
+                    className="mt-2 rounded-md p-4 shadow-lg space-y-3 w-full max-h-[80vh] overflow-auto z-50"
+                    style={{ backgroundColor: 'var(--secondary)' }}
                   >
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-3">
                       {loadingCategories ? (
-                        <div className="block text-base font-medium text-foreground">
+                        <div className="block text-lg font-medium text-foreground">
                           Laddar...
                         </div>
                       ) : (
                         categories.map((cat) => (
                           <Link
-                            key={cat.id}
-                            href={`/kategori/${cat.id}`}
-                            className="block text-base font-medium text-foreground hover:text-primary"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {cat.name}
-                          </Link>
+                              key={cat.id}
+                              href={`/kategori/${cat.id}`}
+                  className="block text-lg font-medium"
+                    style={{ color: 'var(--secondary-foreground)' }}
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {cat.name}
+                            </Link>
                         ))
                       )}
                     </div>
 
-                    <div className="pt-2 border-t border-muted-foreground/20 flex flex-col gap-2">
+                    <div className="pt-2 border-t border-muted-foreground/20 flex flex-col gap-3">
                       <div className="pt-2">
                         <ModeToggle />
                       </div>
                       {!isAuthenticated ? (
                         <>
-                          <Link
-                            href="/logga-in"
-                            className="block text-base font-medium text-foreground hover:text-primary"
-                            onClick={() => setMobileOpen(false)}
-                          >
+                          <Link href="/logga-in" className="block font-medium" style={actionStyle} onClick={() => setMobileOpen(false)}>
                             Logga in
                           </Link>
-                          <Button asChild variant="default">
-                            <Link
-                              href="/registrera"
-                              onClick={() => setMobileOpen(false)}
-                            >
-                              Registrera
-                            </Link>
-                          </Button>
+                          <Link href="/registrera" className="block font-medium" style={actionStyle} onClick={() => setMobileOpen(false)}>
+                            Registrera
+                          </Link>
                         </>
                       ) : (
                         <>
-                          <Link
-                            href="/mina-sidor"
-                            className="block text-base font-medium text-foreground hover:text-primary"
-                            onClick={() => setMobileOpen(false)}
-                          >
+                          <Link href="/mina-sidor" className="block font-medium" style={actionStyle} onClick={() => setMobileOpen(false)}>
                             Mina sidor
                           </Link>
-                          <button
-                            onClick={handleLogout}
-                            className="block text-base font-medium text-foreground hover:text-primary"
-                          >
+                          <button onClick={handleLogout} className="block font-medium text-foreground hover:text-primary" style={{ minWidth: actionStyle.minWidth, height: actionStyle.height, fontSize: actionStyle.fontSize }}>
                             Logga ut
                           </button>
                         </>

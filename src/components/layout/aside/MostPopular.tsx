@@ -21,7 +21,7 @@ const defaultPopular: PopularItem[] = [
 export default function MostPopular({ popular = defaultPopular }: Props) {
   return (
     <section className="rounded-xl border bg-card text-card-foreground p-6 shadow">
-      <h3 className="text-xl font-bold mb-1 border-b pb-1">Mest Populärt</h3>
+      <h3 className="text-xl text-secondary font-bold mb-1 border-b pb-1">Mest Populärt</h3>
       {/* Now driven by props from a server wrapper. */}
       <ul className="space-y-4">
         {popular.map((item, i) => {
