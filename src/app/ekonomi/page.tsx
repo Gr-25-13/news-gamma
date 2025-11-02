@@ -1,5 +1,5 @@
+import SpotChart from "@/components/spotchart";
 import { getSpotPrices } from "@/lib/spotprices";
-import SpotChart from "../components/spotchart";
 
 export default async function SpotPricePage() {
   const todayLocal = new Date().toLocaleDateString("sv-SE");
