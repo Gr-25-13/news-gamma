@@ -6,6 +6,15 @@ import React, { useState, useEffect } from "react";
 import type { AdminUser } from "@/lib/zod-schemas";
 import { ModeToggle } from "../Buttons/toggle-theme-button";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import authClient, { useSession } from "@/lib/auth-client";
 
@@ -17,22 +26,34 @@ export function Navbar(): React.ReactElement {
   const isAuthenticated = !!session?.user;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [categories, setCategories] = useState<NavCategory[]>([]);
+  // Sök-state
+  const [searchQuery, setSearchQuery] = useState("");
   // Shared style for auth / action buttons so they have equal size
   const actionStyle: React.CSSProperties = {
     backgroundColor: 'var(--chart-4)',
     color: 'var(--secondary-foreground)',
-    padding: '0.5rem 0.75rem',
+    padding: '0.25rem 0.5rem',
     borderRadius: '0.375rem',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: '130px',
-    height: '44px',
-    fontSize: '1.125rem',
-    fontWeight: 'semibold'
+    minWidth: '80px',
+    height: '32px',
+    fontSize: '0.875rem',
+    fontWeight: '600'
   };
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [subscriptions, setSubscription] = useState<Array<{ status?: string }>>([]);
+
+  // Hantera sök-submit
+  function handleSearchSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) return;
+    router.push(`/sok?q=${encodeURIComponent(q)}`);
+    setSearchQuery("");
+    setMobileOpen(false);
+  }
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -94,22 +115,40 @@ export function Navbar(): React.ReactElement {
              
             </Link>
 
-            {/* Huvudnavigering (Desktop) - categories from API */}
-            <nav className="hidden md:flex space-x-8">
-              {loadingCategories ? (
-                <div className="text-sm text-muted-foreground">Laddar...</div>
-              ) : (
-                categories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    href={`/kategori/${cat.id}`}
-                    className="whitespace-nowrap text-lg font-medium"
-                    style={{ color: 'var(--secondary-foreground)' }}
-                  >
-                    {cat.name}
-                  </Link>
-                ))
-              )}
+            {/* Huvudnavigering (Desktop) - Startsida + Kategorier-dropdown */}
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/" className="whitespace-nowrap text-lg font-medium" style={{ color: 'var(--secondary-foreground)' }}>
+                Startsida
+              </Link>
+
+              {/* Kategorier dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button type="button" className="whitespace-nowrap text-lg font-medium bg-transparent border-0 p-0 cursor-pointer" style={{ color: 'var(--secondary-foreground)' }}>
+                    Kategorier
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="start">
+                 
+                 
+                  <DropdownMenuGroup>
+                    {loadingCategories ? (
+                      <div className="px-3 py-2 text-sm text-muted-foreground">Laddar...</div>
+                    ) : (
+                      categories.map((cat) => (
+                        <DropdownMenuItem key={cat.id} asChild>
+                          <Link href={`/kategori/${cat.id}`} className="w-full block">
+                            {cat.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))
+                    )}
+                  </DropdownMenuGroup>
+                
+                
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {(session?.user as unknown as AdminUser)?.role === 'admin' && (
                 <Link href="/admin" className="whitespace-nowrap text-lg font-medium" style={{ color: 'var(--secondary-foreground)' }}>
                   Admin
@@ -117,7 +156,25 @@ export function Navbar(): React.ReactElement {
               )}
             </nav>
 
-            <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 gap-4">
+            <div className="hidden md:flex items-center justify-end md:flex-1 gap-4">
+              {/* Desktop-sök */}
+              <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center gap-2">
+                <label htmlFor="nav-search" className="sr-only">Sök</label>
+                <input
+                  id="nav-search"
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Sök..."
+                  className="border border-border rounded-md px-3 py-2 w-64 text-sm bg-transparent"
+                />
+                <button
+                  type="submit"
+                  className="px-3 py-2 rounded-md bg-primary text-white text-sm"
+                >
+                  Sök
+                </button>
+              </form>
               <ModeToggle />
 
               {!isAuthenticated ? (
@@ -136,18 +193,19 @@ export function Navbar(): React.ReactElement {
                   </Link>
                   {activeSubscription?.status === "active" ? (
                     <Button
+                      size="sm"
                       onClick={async () => {
                         await authClient.subscription.cancel({
                           returnUrl: "/"
                         })
                       }}
                       style={actionStyle}
-                      className="px-4 py-2"
                     >
                       Avsluta
                     </Button>
                   ) : (
                     <Button
+                      size="sm"
                       onClick={async () => {
                         await authClient.subscription.upgrade({
                           plan: "Premium",
@@ -155,12 +213,11 @@ export function Navbar(): React.ReactElement {
                           cancelUrl: "/"
                         })
                       }}
-                      className="px-4 py-2 text-lg"
                     >
                       Prenumerera
                     </Button>
                   )}
-                  <Button variant="outline" onClick={handleLogout} style={{ minWidth: actionStyle.minWidth, height: actionStyle.height, fontSize: actionStyle.fontSize }}>
+                  <Button variant="outline" size="sm" onClick={handleLogout} style={{ minWidth: actionStyle.minWidth, height: actionStyle.height, fontSize: actionStyle.fontSize }}>
                     Logga ut
                   </Button>
                 </>
@@ -220,6 +277,18 @@ export function Navbar(): React.ReactElement {
                     style={{ backgroundColor: 'var(--secondary)' }}
                   >
                     <div className="flex flex-col space-y-3">
+                      {/* Mobil-sök */}
+                      <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+                        <label htmlFor="mobile-nav-search" className="sr-only">Sök</label>
+                        <input
+                          id="mobile-nav-search"
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Sök..."
+                          className="w-full border border-border rounded-md px-3 py-2 text-sm bg-transparent"
+                        />
+                      </form>
                       {loadingCategories ? (
                         <div className="block text-lg font-medium text-foreground">
                           Laddar...
