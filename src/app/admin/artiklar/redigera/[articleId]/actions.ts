@@ -8,8 +8,9 @@ export async function editArticle(values: ArticleEditValues) {
   await requireAdmin();
   const data = await ArticleEditSchema.parseAsync(values);
 
-    // Build connect array from provided categoryIds
-    const connectCategories = (data.categoryIds || []).map((id) => ({ id }));
+  // For Article -> Category relation we store a single categoryId.
+  // Pick the first provided category id (if any) and connect that.
+  const categoryId = data.categoryIds?.[0];
 
   const updated = await prisma.article.update({
     where: { id: data.id },
@@ -19,8 +20,10 @@ export async function editArticle(values: ArticleEditValues) {
       content: data.content,
       image_url: data.image_url,
       editorsChoice: data.editorsChoice,
-        category: { set: [], connect: connectCategories },
+      // Only connect a single category (schema defines Article.category as a singular relation)
+      ...(categoryId ? { category: { connect: { id: categoryId } } } : {}),
     },
   });
-  redirect(`/article/${updated.id}`);
+  // After editing an article, return the admin to the articles list
+  redirect(`/admin/artiklar`);
 }

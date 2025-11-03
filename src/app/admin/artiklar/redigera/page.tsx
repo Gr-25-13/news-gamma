@@ -38,13 +38,7 @@ export default async function AdminRedigeraArtikelPage({
                 <div>
                   <div className="font-semibold">{a.headline}</div>
                   <div className="text-sm text-muted-foreground">
-                    {Array.isArray(
-                      (a as Article & { category: Category[] }).category
-                    )
-                      ? (a as Article & { category: Category[] }).category
-                          .map((c) => c.name)
-                          .join(", ")
-                      : ""}
+                    {a.category ? a.category.name : ""}
                   </div>
                 </div>
                 <div className="flex gap-2">
