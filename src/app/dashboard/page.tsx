@@ -105,16 +105,14 @@ export default async function Dashboard() {
     },
     take: 7,
   });
-  const UserData: UserDataProps[] = recentUsers.map(
-    (account) => ({
-      name: account.name || "Unknown",
-      email: account.email || "Unknown",
-      // image: account.image || "/images/user-icon.jpg",
-      time: formatDistanceToNow(new Date(account.createdAt), {
-        addSuffix: true,
-      }),
-    })
-  );
+  const UserData: UserDataProps[] = recentUsers.map((account) => ({
+    name: account.name || "Unknown",
+    email: account.email || "Unknown",
+    // image: account.image || "/images/user-icon.jpg",
+    time: formatDistanceToNow(new Date(account.createdAt), {
+      addSuffix: true,
+    }),
+  }));
 
   const usersThisMonth = await prisma.user.groupBy({
     by: ["createdAt"],
