@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getWeatherByLocation } from "@/app/actions/weather";
+import { getWeatherByLocation } from "@/lib/weather";
 
 export async function POST(req: Request) {
   try {
@@ -12,8 +12,12 @@ export async function POST(req: Request) {
       body = undefined;
     }
 
-  const parsed = (body as Record<string, unknown>) ?? {};
-  const { lat, lon, location } = parsed as { lat?: number; lon?: number; location?: string };
+    const parsed = (body as Record<string, unknown>) ?? {};
+    const { lat, lon, location } = parsed as {
+      lat?: number;
+      lon?: number;
+      location?: string;
+    };
 
     let locParam: string | undefined;
     if (location && typeof location === "string") {
@@ -23,7 +27,8 @@ export async function POST(req: Request) {
       locParam = `${lat},${lon}`;
     }
 
-    if (!locParam) return NextResponse.json({ error: "Missing location" }, { status: 400 });
+    if (!locParam)
+      return NextResponse.json({ error: "Missing location" }, { status: 400 });
 
     const data = await getWeatherByLocation(locParam);
     if (!data) return NextResponse.json({ error: "No data" }, { status: 502 });

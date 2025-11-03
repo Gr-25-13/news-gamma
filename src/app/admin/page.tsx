@@ -4,14 +4,13 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { requireAdmin } from "@/lib/server-auth";
 
-
 export default async function AdminPage() {
   await requireAdmin();
 
   return (
     <>
       <Navbar />
-      <main className="flex-grow pt-8 pb-16">
+      <main className="flex grow pt-8 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold mb-8">Adminpanel</h1>
           <div className="flex flex-col md:flex-row gap-6 justify-center mt-8">
@@ -22,13 +21,7 @@ export default async function AdminPage() {
             >
               Artiklar
             </LinkButton>
-            <LinkButton
-              href="/admin/artiklar-ai"
-              variant="primary"
-              className="w-full md:w-auto text-center text-lg py-4 px-8"
-            >
-              Artiklar AI
-            </LinkButton>
+
             <LinkButton
               href="/admin/kategorier"
               variant="primary"

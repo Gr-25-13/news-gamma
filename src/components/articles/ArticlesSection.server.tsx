@@ -1,7 +1,7 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
 import type { Article as LocalArticle } from "@/lib/articles";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma";
 import Section from "@/components/articles/Section";
 import ArticleHero from "@/components/articles/ArticleHero";
 import ArticleCard from "@/components/articles/ArticleCard";
@@ -52,7 +52,7 @@ export default async function ArticlesSection() {
   return (
     <Section title="Artiklar">
       {hero && <ArticleHero article={hero} />}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mt-6 grid  grid-cols-1 md:grid-cols-3 gap-4">
         {rest.map((article) => (
           <ArticleCard key={article.id} article={article} />
         ))}
