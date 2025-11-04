@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState, useRef } from "react";
 import Image from "next/image";
-import ArticleContent from "@/components/ArticleContent";
+import ArticleContent from "@/components/articles/ArticleContent";
 import { generateNews } from "./ai";
 import {
   BlockTypeSelect,

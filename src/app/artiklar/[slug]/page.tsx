@@ -7,7 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import Aside from "@/components/layout/aside/aside";
 import { prisma } from "@/lib/prisma";
-import ArticleContent from "@/components/ArticleContent";
+import ArticleContent from "@/components/articles/ArticleContent";
 import { getSession } from "@/lib/server-auth";
 
 type Props = {
