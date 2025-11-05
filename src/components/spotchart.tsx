@@ -1,6 +1,6 @@
 "use client";
 
-import { Se1, Se2, Se3, Se4 } from "@/lib/types/el-price";
+import { Se1, Se2, Se3, Se4 } from "@/types/el-price";
 import {
   LineChart,
   Line,

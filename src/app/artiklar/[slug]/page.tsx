@@ -9,6 +9,7 @@ import Aside from "@/components/layout/aside/aside";
 import { prisma } from "@/lib/prisma";
 import ArticleContent from "@/components/articles/ArticleContent";
 import { getSession } from "@/lib/server-auth";
+import CommentsSection from "@/components/articles/CommentsSection";
 
 type Props = {
   params: { slug: string };
@@ -173,6 +174,9 @@ export default async function ArticlePage({
                     Tillbaka till startsidan
                   </Link>
                 </div>
+
+                {/* Comments section */}
+                <CommentsSection articleId={article.id} />
               </article>
             </div>
 

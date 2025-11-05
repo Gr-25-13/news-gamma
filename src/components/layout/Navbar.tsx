@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import authClient, { useSession } from "@/lib/auth-client";
+import { getNavbarCategories } from "@/lib/categoryActions";
 
 type NavCategory = { id: string; name: string };
 
@@ -102,10 +103,10 @@ export function Navbar(): React.ReactElement {
     let mounted = true;
     async function load() {
       try {
-        const res = await fetch("/api/kategorier");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        if (mounted) setCategories(data || []);
+        const result = await getNavbarCategories();
+        if (mounted && result.ok) {
+          setCategories(result.categories || []);
+        }
       } catch (err) {
         console.error("Could not load navbar categories", err);
       } finally {
