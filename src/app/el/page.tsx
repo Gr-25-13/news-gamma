@@ -14,8 +14,8 @@ export default async function SpotPricePage() {
       <Navbar />
       <div className="font-sans  p-8 sm:p-20 bg-sky-150">
         <div className="mx-auto w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <main className="flex flex-col items-center w-full lg:col-span-2 border rounded-lg p-6 bg-white shadow">
-        <h1 className="text-3xl font-bold text-forground mb-8">
+          <main className="flex flex-col items-center w-full lg:col-span-2 border rounded-lg p-6">
+        <h1 className="text-3xl font-bold text-primary mb-8">
           💡 Spotpriser för el i Sverige ({todayLocal})
         </h1>
 
