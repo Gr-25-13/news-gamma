@@ -37,7 +37,7 @@ export default function SearchForm({
       params.delete(paramName);
     }
     const qs = params.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname);
+    router.push(qs ? `${pathname}?${qs}` : pathname);
   }
 
   return (
