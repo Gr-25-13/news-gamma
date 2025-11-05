@@ -47,7 +47,7 @@
 
 :root {
   --radius: 0.625rem;
-  
+
   /* Ljust tema - #c4071d (röd), #003366 (blå), #ffffff (vit), #000000 (svart) */
   --background: #ffffff;
   --foreground: #004d99;
@@ -87,7 +87,7 @@
   /* Mörkt tema - #000d19 (bakgrund), #111111 (kort), #c4071d (röd), #003366 (blå), #ffffff (vit) */
   --background: #000d19;
   --foreground: #004d99;
-  --card: #010a11;
+  --card: #031525;
   --card-foreground: #ffffff;
   --popover: #111111;
   --popover-foreground: #ffffff;
