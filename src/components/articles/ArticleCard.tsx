@@ -50,7 +50,7 @@ export function ArticleCard({
       {/* bild (nu under rubriken och över excerpt) */}
       <div className="col-span-full w-full h-40 md:h-48 rounded-md overflow-hidden bg-muted relative">
         {article.premium ? (
-          <div className="absolute left-2 top-2 bg-primary-foreground text-primary px-2 py-0.5 rounded-md text-xs font-semibold">
+          <div className="absolute left-2 top-2 bg-foreground/70 text-secondary-foreground px-2 py-0.5 rounded-md text-xs font-semibold">
             Premium Artikel
           </div>
         ) : null}

@@ -30,7 +30,7 @@ export function ArticleHero({ article, className = "" }: Props) {
           aria-label={article.title}
         >
           {article.premium ? (
-            <div className="absolute left-3 top-3 bg-primary-foreground/50 shaddow text-foreground px-2 py-0.5 rounded-md text-xs font-semibold">
+            <div className="absolute left-3 top-3 bg-foreground/70 text-secondary-foreground shaddow px-2 py-0.5 rounded-md text-xs font-semibold">
               Premium Artikel
             </div>
           ) : null}
