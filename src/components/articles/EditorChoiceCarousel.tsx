@@ -25,11 +25,15 @@ export function EditorChoiceCarousel({ articles }: Props) {
   );
 
   const handleMouseEnter = () => {
-    plugin.current?.stop();
+    if (plugin.current) {
+      plugin.current.stop();
+    }
   };
 
   const handleMouseLeave = () => {
-    plugin.current?.reset();
+    if (plugin.current) {
+      plugin.current.play();
+    }
   };
 
   return (
