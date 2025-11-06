@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { Article } from "@/lib/articles";
+import type { Article } from "@/types/articles";
 
 type Props = {
   article: Article;
@@ -30,7 +30,7 @@ export function ArticleHero({ article, className = "" }: Props) {
           aria-label={article.title}
         >
           {article.premium ? (
-            <div className="absolute left-3 top-3 bg-primary-foreground/50 shaddow text-foreground px-2 py-0.5 rounded-md text-xs font-semibold">
+            <div className="absolute left-3 top-3 bg-foreground/70 text-secondary-foreground shaddow px-2 py-0.5 rounded-md text-xs font-semibold">
               Premium Artikel
             </div>
           ) : null}
@@ -52,7 +52,7 @@ export function ArticleHero({ article, className = "" }: Props) {
               {article.title}
             </h3>
           </Link>
-          <div className="mt-4 text-muted-foreground line-clamp-4 prose prose-lg max-w-none">
+          <div className="mt-4 text-muted-foreground line-clamp-8 prose prose-md max-w-none">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {article.excerpt}
             </ReactMarkdown>

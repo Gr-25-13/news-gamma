@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Article } from "@/lib/articles";
+import type { Article } from "@/types/articles";
 import { notFound, redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -9,6 +9,7 @@ import Aside from "@/components/layout/aside/aside";
 import { prisma } from "@/lib/prisma";
 import ArticleContent from "@/components/articles/ArticleContent";
 import { getSession } from "@/lib/server-auth";
+import CommentsSection from "@/components/articles/CommentsSection";
 
 type Props = {
   params: { slug: string };
@@ -173,6 +174,9 @@ export default async function ArticlePage({
                     Tillbaka till startsidan
                   </Link>
                 </div>
+
+                {/* Comments section */}
+                <CommentsSection articleId={article.id} />
               </article>
             </div>
 

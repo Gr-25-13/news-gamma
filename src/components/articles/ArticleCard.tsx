@@ -4,7 +4,7 @@ import remarkGfm from "remark-gfm";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { Article } from "@/lib/articles";
+import type { Article } from "@/types/articles";
 
 type Props = {
   article: Article;
@@ -17,13 +17,12 @@ export function ArticleCard({
   compact = false,
   className = "",
 }: Props) {
-  // Säker läsning av eventuellt bildfält utan `any`
   const imgSrc = (article as { image?: string }).image ?? "/placeholder.png";
 
   return (
     <article
       className={cn(
-        // group for child hover effects, scale on hover and smoother GPU transform
+        // HOVER EFFEKT OCH STILAR
         "group bg-card rounded-lg shadow transition duration-200 border border-border transform-gpu",
         "hover:shadow-2xl hover:scale-105",
         compact ? "p-3" : "p-6",
@@ -50,7 +49,7 @@ export function ArticleCard({
       {/* bild (nu under rubriken och över excerpt) */}
       <div className="col-span-full w-full h-40 md:h-48 rounded-md overflow-hidden bg-muted relative">
         {article.premium ? (
-          <div className="absolute left-2 top-2 bg-primary-foreground text-primary px-2 py-0.5 rounded-md text-xs font-semibold">
+          <div className="absolute left-2 top-2 bg-foreground/70 text-secondary-foreground px-2 py-0.5 rounded-md text-xs font-semibold">
             Premium Artikel
           </div>
         ) : null}
@@ -66,7 +65,7 @@ export function ArticleCard({
 
       {/* excerpt + Läs mer */}
       <div className="col-span-full">
-        <div className="mt-2 text-sm text-muted-foreground line-clamp-3 prose prose-sm max-w-none">
+        <div className="mt-2 text-sm text-muted-foreground line-clamp-6 prose prose-sm max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {article.excerpt}
           </ReactMarkdown>

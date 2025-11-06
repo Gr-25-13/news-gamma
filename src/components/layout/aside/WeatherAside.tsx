@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import WeatherComment from "@/components/weather-comments";
+import { getWeatherData } from "@/lib/actions/weather-location";
 
 interface WeatherTimeseriesItem {
   temp: number | null;
@@ -65,15 +66,14 @@ export default function WeatherAside({ weather }: Props) {
         try {
           const { latitude, longitude } = pos.coords;
 
-          const res = await fetch("/api/weather", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lat: latitude, lon: longitude }),
+          const result = await getWeatherData({
+            lat: latitude,
+            lon: longitude,
           });
 
-          if (!res.ok) return;
+          if (!result.ok || !result.data) return;
 
-          const data = await res.json();
+          const data = result.data;
 
           if (!cancelled && data) {
             const first = data?.timeseries?.[0];

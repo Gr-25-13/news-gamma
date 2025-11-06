@@ -1,6 +1,6 @@
 "use client";
 
-import { Se1, Se2, Se3, Se4 } from "@/lib/types/el-price";
+import { Se1, Se2, Se3, Se4 } from "@/types/el-price";
 import {
   LineChart,
   Line,
@@ -20,7 +20,9 @@ export default function SpotChart({
 }) {
   return (
     <div className="bg-white rounded-xl shadow p-4">
-      <h3 className="text-lg font-semibold text-center mb-4">{title}</h3>
+      <h3 className="text-lg text-primary font-semibold text-center mb-4">
+        {title}
+      </h3>
 
       <div className="w-full h-64">
         <ResponsiveContainer width="100%" height="100%">
@@ -32,7 +34,7 @@ export default function SpotChart({
             <Line
               type="monotone"
               dataKey="price_sek"
-              stroke="#0284c7"
+              stroke="#004d99"
               strokeWidth={2}
               dot={{ r: 3 }}
             />

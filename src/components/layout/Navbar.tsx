@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
-import type { AdminUser } from "@/lib/zod-schemas";
+import type { AdminUser } from "@/lib/schema/zod-schemas";
 import { ModeToggle } from "../Buttons/toggle-theme-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,8 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-import authClient, { useSession } from "@/lib/auth-client";
+import authClient, { useSession } from "@/lib/client/auth-client";
+import { getNavbarCategories } from "@/lib/actions/category";
 
 type NavCategory = { id: string; name: string };
 
@@ -29,20 +30,6 @@ export function Navbar(): React.ReactElement {
   const [searchOpen, setSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement | null>(null);
   const searchButtonRef = useRef<HTMLButtonElement | null>(null);
-  // Shared style for auth / action buttons so they have equal size
-  const actionStyle: React.CSSProperties = {
-    backgroundColor: "var(--chart-4)",
-    color: "var(--secondary-foreground)",
-    padding: "0.25rem 0.5rem",
-    borderRadius: "0.375rem",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: "80px",
-    height: "32px",
-    fontSize: "0.875rem",
-    fontWeight: "600",
-  };
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [subscriptions, setSubscription] = useState<Array<{ status?: string }>>(
     []
@@ -102,10 +89,10 @@ export function Navbar(): React.ReactElement {
     let mounted = true;
     async function load() {
       try {
-        const res = await fetch("/api/kategorier");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        if (mounted) setCategories(data || []);
+        const result = await getNavbarCategories();
+        if (mounted && result.ok) {
+          setCategories(result.categories || []);
+        }
       } catch (err) {
         console.error("Could not load navbar categories", err);
       } finally {
@@ -120,10 +107,7 @@ export function Navbar(): React.ReactElement {
 
   return (
     <>
-      <header
-        className="shadow-md sticky top-0 z-50"
-        style={{ backgroundColor: "var(--secondary)" }}
-      >
+      <header className="shadow-md sticky top-0 z-50 bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
             {/* Logo och Titel-sektion */}
@@ -142,16 +126,14 @@ export function Navbar(): React.ReactElement {
             <nav className="hidden md:flex items-center space-x-6">
               <Link
                 href="/"
-                className="whitespace-nowrap text-lg font-medium"
-                style={{ color: "var(--secondary-foreground)" }}
+                className="whitespace-nowrap text-lg font-medium text-secondary-foreground"
               >
                 Startsida
               </Link>
 
               <Link
                 href="/redaktorens-val"
-                className="whitespace-nowrap text-lg font-medium"
-                style={{ color: "var(--secondary-foreground)" }}
+                className="whitespace-nowrap text-lg font-medium text-secondary-foreground"
               >
                 Redaktörens val
               </Link>
@@ -162,8 +144,7 @@ export function Navbar(): React.ReactElement {
                   <button
                     id="kategorier-dropdown-trigger"
                     type="button"
-                    className="whitespace-nowrap text-lg font-medium bg-transparent border-0 p-0 cursor-pointer"
-                    style={{ color: "var(--secondary-foreground)" }}
+                    className="whitespace-nowrap text-lg font-medium bg-transparent border-0 p-0 cursor-pointer text-secondary-foreground"
                   >
                     Kategorier
                   </button>
@@ -193,10 +174,17 @@ export function Navbar(): React.ReactElement {
               {(session?.user as unknown as AdminUser)?.role === "admin" && (
                 <Link
                   href="/admin"
-                  className="whitespace-nowrap text-lg font-medium"
-                  style={{ color: "var(--secondary-foreground)" }}
+                  className="whitespace-nowrap text-lg font-medium text-secondary-foreground"
                 >
                   Admin
+                </Link>
+              )}
+              {(session?.user as unknown as AdminUser)?.role === "editor" && (
+                <Link
+                  href="/admin"
+                  className="whitespace-nowrap text-lg font-medium text-secondary-foreground"
+                >
+                  Editor&apos;s page
                 </Link>
               )}
             </nav>
@@ -235,7 +223,10 @@ export function Navbar(): React.ReactElement {
                     ref={searchRef}
                     className="absolute right-0 top-full mt-2 w-80 bg-card border border-border rounded-md p-3 shadow-lg z-50"
                   >
-                    <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+                    <form
+                      onSubmit={handleSearchSubmit}
+                      className="flex items-center gap-2"
+                    >
                       <label htmlFor="nav-search" className="sr-only">
                         Sök
                       </label>
@@ -267,15 +258,13 @@ export function Navbar(): React.ReactElement {
                 <>
                   <Link
                     href="/logga-in"
-                    className="whitespace-nowrap text-lg font-medium"
-                    style={actionStyle}
+                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Logga in
                   </Link>
                   <Link
                     href="/registrera"
-                    className="whitespace-nowrap text-lg font-medium"
-                    style={actionStyle}
+                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Registrera
                   </Link>
@@ -284,8 +273,7 @@ export function Navbar(): React.ReactElement {
                 <>
                   <Link
                     href="/mina-sidor"
-                    className="whitespace-nowrap text-lg font-medium"
-                    style={actionStyle}
+                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Mina sidor
                   </Link>
@@ -313,11 +301,7 @@ export function Navbar(): React.ReactElement {
                     variant="outline"
                     size="sm"
                     onClick={handleLogout}
-                    style={{
-                      minWidth: actionStyle.minWidth,
-                      height: actionStyle.height,
-                      fontSize: actionStyle.fontSize,
-                    }}
+                    className="min-w-20 h-8 text-sm"
                   >
                     Logga ut
                   </Button>
@@ -338,7 +322,7 @@ export function Navbar(): React.ReactElement {
                   {mobileOpen ? (
                     /* Stäng-ikon */
                     <svg
-                      className="h-6 w-6 text-muted-foreground"
+                      className="h-6 w-6 text-primary-foreground"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -354,7 +338,7 @@ export function Navbar(): React.ReactElement {
                   ) : (
                     /* Hamburgare-ikon */
                     <svg
-                      className="h-6 w-6 text-muted-foreground"
+                      className="h-6 w-6 text-primary-foreground"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -374,8 +358,7 @@ export function Navbar(): React.ReactElement {
                 {mobileOpen && (
                   <nav
                     id="mobile-menu"
-                    className="mt-2 rounded-md p-4 shadow-lg space-y-3 w-full max-h-[80vh] overflow-auto z-50"
-                    style={{ backgroundColor: "var(--secondary)" }}
+                    className="mt-2 rounded-md p-4 shadow-lg space-y-3 w-full max-h-[80vh] overflow-auto z-50 bg-secondary"
                   >
                     <div className="flex flex-col space-y-3">
                       {/* Mobil-sök */}
@@ -404,8 +387,7 @@ export function Navbar(): React.ReactElement {
                           <Link
                             key={cat.id}
                             href={`/kategori/${cat.id}`}
-                            className="block text-lg font-medium"
-                            style={{ color: "var(--secondary-foreground)" }}
+                            className="block text-lg font-medium text-secondary-foreground"
                             onClick={() => setMobileOpen(false)}
                           >
                             {cat.name}
@@ -414,8 +396,7 @@ export function Navbar(): React.ReactElement {
                       )}
                       <Link
                         href="/redaktorens-val"
-                        className="block text-lg font-medium"
-                        style={{ color: "var(--secondary-foreground)" }}
+                        className="block text-lg font-medium text-secondary-foreground"
                         onClick={() => setMobileOpen(false)}
                       >
                         Redaktörens val
@@ -424,8 +405,7 @@ export function Navbar(): React.ReactElement {
                         "admin" && (
                         <Link
                           href="/admin"
-                          className="block text-lg font-medium"
-                          style={{ color: "var(--secondary-foreground)" }}
+                          className="block text-lg font-medium text-secondary-foreground"
                           onClick={() => setMobileOpen(false)}
                         >
                           Admin
@@ -441,16 +421,14 @@ export function Navbar(): React.ReactElement {
                         <>
                           <Link
                             href="/logga-in"
-                            className="block font-medium"
-                            style={actionStyle}
+                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Logga in
                           </Link>
                           <Link
                             href="/registrera"
-                            className="block font-medium"
-                            style={actionStyle}
+                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Registrera
@@ -460,20 +438,14 @@ export function Navbar(): React.ReactElement {
                         <>
                           <Link
                             href="/mina-sidor"
-                            className="block font-medium"
-                            style={actionStyle}
+                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Mina sidor
                           </Link>
                           <button
                             onClick={handleLogout}
-                            className="block font-medium text-foreground hover:text-primary"
-                            style={{
-                              minWidth: actionStyle.minWidth,
-                              height: actionStyle.height,
-                              fontSize: actionStyle.fontSize,
-                            }}
+                            className="block font-medium text-foreground hover:text-primary min-w-20 h-8 text-sm"
                           >
                             Logga ut
                           </button>
@@ -486,22 +458,38 @@ export function Navbar(): React.ReactElement {
             </div>
           </div>
         </div>
-
         {/* Varningsraden under länkar och knappar
         <div className="w-full overflow-hidden">
           <div
             role="status"
             aria-live="polite"
             className="marquee-bar"
-            style={{ backgroundColor: 'var(--primary)', color: 'var(--accent-foreground)', fontWeight: 'bold' }}
+            style={{
+              backgroundColor: "var(--primary)",
+              color: "var(--accent-foreground)",
+              fontWeight: "bold",
+            }}
           >
             <div
               className="marquee"
-              style={{ display: 'inline-block', paddingLeft: '100%', whiteSpace: 'nowrap', animation: 'marquee 40s linear infinite' }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.animationPlayState = 'paused')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.animationPlayState = 'running')}
+              style={{
+                display: "inline-block",
+                paddingLeft: "100%",
+                whiteSpace: "nowrap",
+                animation: "marquee 40s linear infinite",
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.animationPlayState =
+                  "paused")
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLDivElement).style.animationPlayState =
+                  "running")
+              }
             >
-              VARNING TILL ALLMÄNHETEN — En man som identifierar sig som en Kalkong springer runt med blöjja på södermalm, men va inte orolig han är inte farlig även om det är mycket obehagligt!
+              VARNING TILL ALLMÄNHETEN — En man som identifierar sig som en
+              Kalkong springer runt med blöjja på södermalm, men va inte orolig
+              han är inte farlig även om det är mycket obehagligt!
             </div>
           </div>
 
@@ -516,8 +504,8 @@ export function Navbar(): React.ReactElement {
             @media (prefers-reduced-motion: reduce) {
               .marquee { animation: none !important; transform: none !important; }
             }
-          `}</style>
-        </div> */}
+          `}</style> */}
+        {/* </div> */}
       </header>
     </>
   );

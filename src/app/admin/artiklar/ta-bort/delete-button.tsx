@@ -1,40 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { deleteArticle } from "@/lib/actions/admin";
 
 export default function DeleteButton({ id }: { id: string }) {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleDelete = () => {
+    if (!confirm("Är du säker på att du vill ta bort artikeln?")) return;
+    
+    startTransition(async () => {
+      try {
+        const result = await deleteArticle(id);
+
+        if (result?.ok) {
+          toast.success("Artikeln togs bort");
+          router.refresh();
+          router.push("/admin/artiklar");
+        } else {
+          toast.error(
+            "Kunde inte ta bort: " + (result?.error ?? "okänt fel")
+          );
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Något gick fel");
+      }
+    });
+  };
 
   return (
     <Button
       className="bg-red-600 p-2 rounded-lg text-white"
-      disabled={isDeleting}
-      onClick={async () => {
-        if (!confirm("Är du säker på att du vill ta bort artikeln?")) return;
-        setIsDeleting(true);
-        try {
-          const res = await fetch("/api/admin/artiklar/delete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id }),
-          });
-          const json = await res.json();
-          if (json?.ok) {
-            toast.success('Artikeln togs bort');
-            setTimeout(() => location.reload(), 500);
-          } else {
-            toast.error('Kunde inte ta bort: ' + (json?.error ?? 'okänt fel'));
-            setIsDeleting(false);
-          }
-        } catch (err) {
-          console.error(err);
-          toast.error('Något gick fel');
-          setIsDeleting(false);
-        }
-      }}
+      disabled={isPending}
+      onClick={handleDelete}
     >
-      {isDeleting ? 'Tar bort...' : 'Ta bort'}
+      {isPending ? "Tar bort..." : "Ta bort"}
     </Button>
   );
 }

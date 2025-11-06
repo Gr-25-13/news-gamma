@@ -4,7 +4,8 @@ import type { Prisma } from "@/generated/prisma";
 import Section from "@/components/articles/Section";
 import ArticleHero from "@/components/articles/ArticleHero";
 import ArticleCard from "@/components/articles/ArticleCard";
-import type { Article as LocalArticle } from "@/lib/articles";
+import EditorChoiceCarousel from "@/components/articles/EditorChoiceCarousel";
+import type { Article as LocalArticle } from "@/types/articles";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -37,10 +38,13 @@ export default async function EditorChoicePage() {
     content: a.content ?? "",
     category: a.category?.name ?? "",
     image:
-      a.image_url && (a.image_url.startsWith("http") || a.image_url.startsWith("/"))
+      a.image_url &&
+      (a.image_url.startsWith("http") || a.image_url.startsWith("/"))
         ? a.image_url
         : undefined,
-    date: a.createdAt ? new Date(a.createdAt).toISOString().slice(0, 10) : undefined,
+    date: a.createdAt
+      ? new Date(a.createdAt).toISOString().slice(0, 10)
+      : undefined,
     premium: (a as unknown as { premium?: boolean }).premium ?? false,
   }));
 
@@ -51,7 +55,8 @@ export default async function EditorChoicePage() {
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Section title="Redaktörens val">
-          {hero && <ArticleHero article={hero} />}
+          <EditorChoiceCarousel articles={articles} />
+          {hero && <ArticleHero article={hero} className="mt-6" />}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             {rest.map((article) => (
               <ArticleCard key={article.id} article={article} />
