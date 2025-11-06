@@ -6,10 +6,7 @@ import Section from "@/components/articles/Section";
 import ArticleHero from "@/components/articles/ArticleHero";
 import ArticleCard from "@/components/articles/ArticleCard";
 
-// Server component that fetches articles and renders the hero + cards
 export default async function ArticlesSection() {
-  // Use createdAt and image_url per Prisma schema. Slug is not stored in DB,
-  // so derive a URL-safe slug from the headline and append a short id.
   type ArticleWithCategory = Prisma.ArticleGetPayload<{
     include: { category: true };
   }>;
@@ -35,7 +32,7 @@ export default async function ArticlesSection() {
     title: a.headline ?? "",
     excerpt: a.summary ?? "",
     content: a.content ?? "",
-    // category is a single object, not an array
+
     category: a.category?.name ?? "",
     image:
       a.image_url &&
