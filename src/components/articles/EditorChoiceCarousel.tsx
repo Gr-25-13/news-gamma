@@ -20,16 +20,28 @@ type Props = {
 };
 
 export function EditorChoiceCarousel({ articles }: Props) {
-  const autoplayRef = React.useRef(
+  const [isHovered, setIsHovered] = React.useState(false);
+  const plugin = React.useRef(
     Autoplay({ delay: 2700, stopOnInteraction: false })
   );
 
+  React.useEffect(() => {
+    const autoplay = plugin.current;
+    if (!autoplay) return;
+
+    if (isHovered) {
+      autoplay.stop();
+    } else {
+      autoplay.reset();
+    }
+  }, [isHovered]);
+
   const handleMouseEnter = () => {
-    autoplayRef.current.stop();
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    autoplayRef.current.play();
+    setIsHovered(false);
   };
 
   return (
@@ -43,7 +55,7 @@ export function EditorChoiceCarousel({ articles }: Props) {
           align: "start",
           loop: true,
         }}
-        plugins={[autoplayRef.current]}
+        plugins={[plugin.current]}
         className="w-full"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
