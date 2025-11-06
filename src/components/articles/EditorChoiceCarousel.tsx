@@ -20,28 +20,16 @@ type Props = {
 };
 
 export function EditorChoiceCarousel({ articles }: Props) {
-  const [isHovered, setIsHovered] = React.useState(false);
   const plugin = React.useRef(
     Autoplay({ delay: 2700, stopOnInteraction: false })
   );
 
-  React.useEffect(() => {
-    const autoplay = plugin.current;
-    if (!autoplay) return;
-
-    if (isHovered) {
-      autoplay.stop();
-    } else {
-      autoplay.reset();
-    }
-  }, [isHovered]);
-
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    plugin.current?.stop();
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    plugin.current?.reset();
   };
 
   return (
