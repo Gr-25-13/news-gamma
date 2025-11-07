@@ -244,27 +244,6 @@ export default function AboutPage(): React.ReactElement {
                 </p>
               </div>
             </section>
-
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/"
-                className="inline-block px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-              >
-                Till startsidan
-              </Link>
-              <Link
-                href="/artiklar"
-                className="inline-block px-6 py-2.5 rounded-lg border border-border text-foreground font-medium hover:bg-accent transition-colors"
-              >
-                Artiklar
-              </Link>
-              <Link
-                href="/kontakta-oss"
-                className="inline-block px-6 py-2.5 rounded-lg border border-border text-foreground font-medium hover:bg-accent transition-colors"
-              >
-                Kontakta oss
-              </Link>
-            </div>
           </div>
         </div>
       </main>
