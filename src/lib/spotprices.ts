@@ -1,3 +1,4 @@
+"use server";
 import { spotPrices } from "../types/el-price";
 
 export async function getSpotPrices(date: string): Promise<spotPrices> {

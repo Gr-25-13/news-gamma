@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import ThemeLogo from "@/components/Logo/ThemeLogo";
 import React, { useState, useEffect, useRef } from "react";
 import type { AdminUser } from "@/lib/schema/zod-schemas";
 import { ModeToggle } from "../Buttons/toggle-theme-button";
@@ -112,14 +112,10 @@ export function Navbar(): React.ReactElement {
           <div className="flex justify-between items-center py-4 md:justify-start md:space-x-10">
             {/* Logo och Titel-sektion */}
             <Link href="/" className="flex items-center space-x-3">
-              <Image
-                src="/images/loggo.png"
-                alt="Dagens Dos logotyp"
-                width={60}
-                height={60}
-                className="rounded"
-                priority
-              />
+              <span className="text-4xl font-semibold text-secondary-foreground">
+                Dagens Dos
+              </span>
+              <ThemeLogo width={100} height={60} className="rounded" priority />
             </Link>
 
             {/* Huvudnavigering (Desktop) - Startsida + Kategorier-dropdown */}
@@ -258,13 +254,13 @@ export function Navbar(): React.ReactElement {
                 <>
                   <Link
                     href="/logga-in"
-                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
+                    className="whitespace-nowrap bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Logga in
                   </Link>
                   <Link
                     href="/registrera"
-                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
+                    className="whitespace-nowrap bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Registrera
                   </Link>
@@ -273,7 +269,7 @@ export function Navbar(): React.ReactElement {
                 <>
                   <Link
                     href="/mina-sidor"
-                    className="whitespace-nowrap bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
+                    className="whitespace-nowrap bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md inline-flex items-center justify-center min-w-20 h-8 text-sm font-semibold"
                   >
                     Mina sidor
                   </Link>
@@ -421,14 +417,14 @@ export function Navbar(): React.ReactElement {
                         <>
                           <Link
                             href="/logga-in"
-                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
+                            className="block bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Logga in
                           </Link>
                           <Link
                             href="/registrera"
-                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
+                            className="block bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Registrera
@@ -438,14 +434,14 @@ export function Navbar(): React.ReactElement {
                         <>
                           <Link
                             href="/mina-sidor"
-                            className="block bg-chart-4 text-secondary-foreground py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
+                            className="block bg-primary text-primary-foreground hover:bg-primary/90 py-1 px-2 rounded-md min-w-20 h-8 text-sm font-semibold text-center"
                             onClick={() => setMobileOpen(false)}
                           >
                             Mina sidor
                           </Link>
                           <button
                             onClick={handleLogout}
-                            className="block font-medium text-foreground hover:text-primary min-w-20 h-8 text-sm"
+                            className="block font-medium text-primary-foreground hover:text-primary min-w-20 h-8 text-sm"
                           >
                             Logga ut
                           </button>

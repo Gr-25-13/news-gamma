@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import ThemeLogo from "@/components/layout/ThemeLogo";
 import React from "react";
 
 type FooterVariant = "primary" | "secondary" | "muted";
@@ -15,24 +15,20 @@ interface FooterSectionProps {
 function FooterSection({
   title,
   links,
-  variant = "primary",
 }: FooterSectionProps): React.ReactElement {
-  const titleClass = `text-lg font-semibold mb-4 ${
-    variant === "primary"
-      ? "text-primary"
-      : variant === "secondary"
-      ? "text-secondary"
-      : "text-muted-foreground"
-  }`;
+  const titleClass = `text-lg font-semibold mb-4 text-primary-foreground`;
   return (
     <div>
       <h4 className={titleClass}>{title}</h4>
-      <ul className="space-y-2 text-sm text-muted-foreground">
+      <ul className="space-y-2 text-sm text-primary-foreground">
         {links.map((link) => (
           <li key={link.name}>
-            <a href={link.href} className="hover:text-primary">
+            <Link
+              href={link.href}
+              className="text-primary-foreground hover:text-primary"
+            >
               {link.name}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
@@ -67,29 +63,26 @@ const footerSections: {
 
 export function Footer(): React.ReactElement {
   return (
-    <footer className="bg-background text-foreground mt-12 py-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-muted-foreground">
+    <footer className="bg-secondary text-primary-foreground mt-12 py-10 rounded-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-primary-foreground">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Logga längst till vänster */}
           <div className="flex items-start">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="relative h-24 w-24">
-                <Image
-                  src="/images/loggo.png"
-                  alt="Nyhetspulsen"
-                  fill
-                  className="object-contain"
-                />
+              <div className="h-24 w-24">
+                <ThemeLogo alt="Dagens Dos" width={96} height={96} />
               </div>
             </Link>
           </div>
 
           {/* Om Oss */}
           <div>
-            <h4 className={`text-lg font-semibold mb-4 text-primary`}>
+            <h4
+              className={`text-lg font-semibold mb-4 text-primary-foreground`}
+            >
               Dagens Dos
             </h4>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-primary-foreground">
               Vår mission är att leverera nyheter så att du kan känna dig
               minimalt informerad.
             </p>
@@ -107,8 +100,8 @@ export function Footer(): React.ReactElement {
         </div>
 
         {/* Copyright */}
-        <div className="mt-10 pt-6 border-t border-muted-foreground/30 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="mt-10 pt-6 border-t border-accent/30 text-center">
+          <p className="text-sm text-primary-foreground">
             &copy; 2025 Dagens Dos. Alla rättigheter reserverade. Utvecklat av
             Josefine, Johan, Ahamed och Magui och en stor dos sarkasm.
           </p>
