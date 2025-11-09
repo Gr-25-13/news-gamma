@@ -45,8 +45,8 @@ Projektet demonstrerar moderna webbutvecklingstekniker med **server-first arkite
 - Extern API-integration (Elpriser, Väderdata)
 
 <p align="center">
-  <img src="screenshot-dark.png" alt="Dark mode" width="48%">
-  <img src="screenshot-light.png" alt="Light mode" width="48%">
+  <img src="./public/screenshot-dark.png" alt="Dark mode" width="48%">
+  <img src="./public/screenshot-light.png" alt="Light mode" width="48%">
 </p>
 
 ---
@@ -298,7 +298,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 ### Admin/Editor-funktioner
 
 <p align="center">
-	<img src="/screenshot-adminartiklar.png" alt="Admin artiklar - screenshot" style="max-width:100%;height:auto;border-radius:6px;" />
+	<img src="./public/screenshot-adminartiklar.png" alt="Admin artiklar - screenshot" style="max-width:100%;height:auto;border-radius:6px;" />
 </p>
 
 - Skapa, redigera, ta bort artiklar
@@ -314,7 +314,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 ### Innehållspresentation
 
 <p align="center">
-	<img src="/screenshot-slug.png" alt="Artikelvy / slug - exempel" style="max-width:100%;height:auto;border-radius:6px;" />
+	<img src="./public/screenshot-slug.png" alt="Artikelvy / slug - exempel" style="max-width:100%;height:auto;border-radius:6px;" />
 </p>
 
 - Responsiva artikelkort
