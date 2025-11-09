@@ -1,12 +1,15 @@
-# News Gamma
+# 📰 News Gamma
 
 <p align="center">
-	<img src="/mockup-dagensdos.jpg" alt="Mockup - Dagens Dos" style="max-width:100%;height:auto;border-radius:8px;" />
+  <img src="mockup-dagensdos.jpg" alt="Mockup - Dagens Dos" width="700">
 </p>
 
-En modern nyhetsapplikation byggd med Next.js 15 (App Router) och TypeScript. Projektet är utvecklat som ett grupparbete av Josefine, Johan, Magui och Ahmed på Lexicon i Linköping.
+En modern nyhetsapplikation byggd med **Next.js 15 (App Router)** och **TypeScript**.  
+Projektet är utvecklat som ett grupparbete av **Josefine, Johan, Magui och Ahmed** på **Lexicon i Linköping**.
 
-## Innehållsförteckning
+---
+
+## 📚 Innehållsförteckning
 
 - [Översikt](#översikt)
 - [Teknikstack](#teknikstack)
@@ -22,153 +25,122 @@ En modern nyhetsapplikation byggd med Next.js 15 (App Router) och TypeScript. Pr
 - [Felsökning](#felsökning)
 - [Kontakt](#kontakt)
 
-## Översikt
+---
 
-News Gamma är en fullstack nyhetsapplikation med fokus på prestanda, typesäkerhet och skalbarhet. Projektet demonstrerar moderna webbutvecklingstekniker med server-first arkitektur, AI-integration och omfattande användarhantering.
+## 🧭 Översikt
 
-### Huvudfunktioner
+**News Gamma** är en fullstack-nyhetsapplikation med fokus på **prestanda**, **typesäkerhet** och **skalbarhet**.  
+Projektet demonstrerar moderna webbutvecklingstekniker med **server-first arkitektur**, **AI-integration** och **användarhantering**.
 
-- Responsiv design med Dark/Light mode
-- Säker autentisering med e-postverifiering
-- Rollbaserad åtkomstkontroll (Admin, Editor, User)
-- Prenumerationssystem med Stripe
-- AI-assisterad artikelgenerering
-- CRUD-funktionalitet för artiklar och kategorier
-- Dashboard med statistik och visualiseringar
+### 🔑 Huvudfunktioner
+
+- Responsiv design med Dark/Light mode  
+- Säker autentisering med e-postverifiering  
+- Rollbaserad åtkomstkontroll (Admin, Editor, User)  
+- Prenumerationssystem med Stripe  
+- AI-assisterad artikelgenerering  
+- CRUD-funktionalitet för artiklar och kategorier  
+- Dashboard med statistik och visualiseringar  
 - Extern API-integration (Elpriser, Väderdata)
 
-<!-- Dark / Light screenshots -->
 <p align="center">
-	<img src="/screenshot-dark.png" alt="Dark mode screenshot" style="max-width:48%;height:auto;border-radius:6px;margin-right:2%;" />
-	<img src="/screenshot-light.png" alt="Light mode screenshot" style="max-width:48%;height:auto;border-radius:6px;" />
+  <img src="screenshot-dark.png" alt="Dark mode" width="48%">
+  <img src="screenshot-light.png" alt="Light mode" width="48%">
 </p>
 
-## Teknikstack
+---
+
+## ⚙️ Teknikstack
 
 ### Frontend
+- **Next.js 15.5.4** (App Router, Turbopack)
+- **React 19.1.0** + **TypeScript 5**
+- **Tailwind CSS 4**
+- **Radix UI**, **Embla Carousel**, **Lucide React**
+- **Next Themes** (Dark/Light mode)
 
-- **Next.js 15.5.4** (App Router med Turbopack)
-- **React 19.1.0** med TypeScript 5
-- **Tailwind CSS 4** med custom animations
-- **Radix UI** - Tillgängliga UI-komponenter
-- **Embla Carousel** - Karusellkomponenter
-- **Lucide React** - Ikonsystem
-- **Next Themes** - Dark/Light mode-hantering
+### Backend & Databas
+- **Prisma 6.18.0** (PostgreSQL)
+- **Better Auth 1.3.27**
+- **Server Actions** (Next.js)
+- **Nodemailer 7.0.10**
+- **Zod 4.1.12**
 
-### Backend & Databashantering
-
-- **Prisma 6.18.0** - ORM med PostgreSQL
-- **Better Auth 1.3.27** - Modern autentiseringslösning med Prisma-adapter
-- **Server Actions** - Next.js server-side funktionalitet för all backend-logik
-- **Nodemailer 7.0.10** - E-posthantering
-- **Zod 4.1.12** - Runtime-validering och typsäkerhet
-
-### Betalningar & Prenumerationer
-
-- **Stripe 19.1.0** - Betalningshantering
-- **Better Auth Stripe Plugin** - Integration för prenumerationshantering
-
-### AI & Innehållsgenerering
-
-- **AI SDK 5.0.80** (Vercel)
-- **Google AI SDK 2.0.23** - Gemini 2.5 Flash integration
-- **MDXEditor 3.48.0** - Rich text editor för artikelinnehåll
+### Betalningar & AI
+- **Stripe 19.1.0**
+- **Better Auth Stripe Plugin**
+- **AI SDK (Vercel)**, **Google AI SDK (Gemini 2.5 Flash)**
+- **MDXEditor 3.48.0**
 
 ### Externa API:er
+- **Spotprices API** – Elpriser SE1–SE4  
+- **SMHI API** – Väderdata
 
-- **Spotprices API** (lexlink.se/espot) - Elpriser för Sverige (SE1-SE4)
-- **SMHI API** - Väderdata
+---
 
-### Utvecklingsverktyg
+## 👥 Teammedlemmar och Bidrag
 
-- **ESLint 9** med Next.js-konfiguration
-- **PostCSS** med Tailwind
-- **TypeScript** - Strikt typning genom hela projektet
+### **Magui – Backend & Betalningar**
+- CRUD för artiklar & kategorier  
+- Stripe-integration  
+- Dashboard-visualiseringar  
+- Rollbaserad åtkomstkontroll  
+- Cookie-banner (GDPR)
 
-## Teammedlemmar och Bidrag
+### **Ahmed – AI & API**
+- Elpris-API med visualisering  
+- Gemini AI-integration  
+- Google Search-koppling  
+- MDX-editor  
+- Zod-validering
 
-### Magui - Backend & Betalningsintegration
+### **Johan – E-post & Verifiering**
+- E-postverifiering (Better Auth + Nodemailer)  
+- Kontaktformulär & templates  
+- SMTP-konfiguration
 
-- CRUD-funktionalitet för artiklar och kategorier
-- Prenumerationsstatistik och Dashboard med datavisualisering
-- Stripe-integration och betalflöde
-- GDPR-kompatibel Cookie Banner
-- Rollbaserad åtkomstkontroll i Admin
+### **Josefine – UX/UI & Autentisering**
+- Design, logotyp, UX-flöden  
+- Better Auth-integration  
+- Rollhantering (Admin/Editor/User)  
+- Sökfunktion & SEO-sluggar  
+- Article rendering-komponenter  
+- Projektledning
 
-### Ahmed - AI-integration & Externa API
+---
 
-- Elpris-API med visualisering av spotpriser (SE1-SE4)
-- Gemini AI-integration för artikelgenerering
-- Google Search-integration i AI-flöde
-- MDX Editor-implementation
-- Structured output med Zod-validering
+## 🧩 Förutsättningar
 
-### Johan - E-postfunktionalitet & Verifiering
+- **Node.js 18+**
+- **npm / pnpm / yarn**
+- **PostgreSQL**
+- **Stripe-konto**
+- (Valfritt) **Google AI API-nyckel**
 
-- Better Auth e-postverifiering med Nodemailer
-- Kontaktformulär med e-postutskick
-- Custom email templates
-- SMTP-konfiguration och token-hantering
-- Säker validering och återskicka verifieringsmail
+---
 
-### Josefine - UX/UI, Autentisering & Innehållspresentation
-
-- UX/UI design och logotyp
-- Better Auth-implementation med Prisma
-- Rollhantering (Admin, Editor, User)
-- Mina Sidor och användarprofilhantering
-- Premium-flagga på artiklar
-- Sökfunktion och SLUG-system för SEO
-- Article rendering-komponenter
-- Editor's Choice Carousel
-- Projektledning och övergripande arkitektur
-
-## Förutsättningar
-
-- **Node.js** 18 eller senare
-- **npm** eller annan Node-pakethanterare
-- **PostgreSQL** databas (lokalt eller i molnet)
-- **Stripe-konto** för betalningsintegration (testläge för utveckling)
-- **Google AI API-nyckel** för Gemini-integration (valfritt)
-
-## Installation
-
-### 1. Klona repository
+## 🚀 Installation
 
 ```bash
+# 1. Klona repo
 git clone <repository-url>
 cd news-gamma
-```
 
-### 2. Installera beroenden
-
-```bash
+# 2. Installera beroenden
 npm install
-```
 
-### 3. Konfigurera miljövariabler
+# 3. Skapa miljöfil
+cp .env.example .env
 
-Skapa en `.env`-fil i projektets rot. Se [Miljövariabler](#miljövariabler) för detaljer.
-
-### 4. Generera Prisma Client
-
-```bash
+# 4. Generera Prisma Client
 npx prisma generate
-```
 
-### 5. Kör databasmigrationer
-
-```bash
+# 5. Migrera databas
 npx prisma migrate dev
-```
 
-### 6. Starta utvecklingsserver
-
-```bash
+# 6. Starta utvecklingsserver
 npm run dev
-```
 
-Applikationen är nu tillgänglig på `http://localhost:3000`
 
 ## Miljövariabler
 
