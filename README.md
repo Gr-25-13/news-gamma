@@ -1,8 +1,9 @@
-# 📰 News Gamma
+# 📰 Dagens Dos
 
 <p align="center">
-  <img src="mockup-dagensdos.jpg" alt="Mockup - Dagens Dos" width="700">
+  <img src="./public/mockup-dagensdos.jpg" alt="Mockup - Dagens Dos" width="700">
 </p>
+
 
 En modern nyhetsapplikation byggd med **Next.js 15 (App Router)** och **TypeScript**.  
 Projektet är utvecklat som ett grupparbete av **Josefine, Johan, Magui och Ahmed** på **Lexicon i Linköping**.
