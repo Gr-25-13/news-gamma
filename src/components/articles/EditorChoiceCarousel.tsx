@@ -23,13 +23,16 @@ export function EditorChoiceCarousel({ articles }: Props) {
   const [plugin] = React.useState(() =>
     Autoplay({ delay: 2700, stopOnInteraction: false }),
   );
+  // Autoplay's own init() bails out (and never sets up its internal timer state)
+  // when there's only one slide, so calling play()/stop() in that case throws.
+  const hasMultipleSlides = articles.length > 1;
 
   const handleMouseEnter = () => {
-    plugin.stop();
+    if (hasMultipleSlides) plugin.stop();
   };
 
   const handleMouseLeave = () => {
-    plugin.play();
+    if (hasMultipleSlides) plugin.play();
   };
 
   return (
@@ -43,7 +46,7 @@ export function EditorChoiceCarousel({ articles }: Props) {
           align: "start",
           loop: true,
         }}
-        plugins={[plugin]}
+        plugins={hasMultipleSlides ? [plugin] : []}
         className="w-full"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

@@ -45,13 +45,6 @@ export default async function AdminArtiklarPage({
               <LinkButton href="/admin/artiklar/skapa" variant="primary">
                 Skapa Artikel
               </LinkButton>
-              <LinkButton
-                href="/admin/artiklar-ai"
-                variant="primary"
-                className="hidden md:inline-flex"
-              >
-                Skapa AI Artikel
-              </LinkButton>
             </div>
           </div>
           <ul className="space-y-4">

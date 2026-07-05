@@ -29,6 +29,10 @@ import {
   UndoRedo,
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+import Image from "next/image";
+import { X } from "lucide-react";
+import { UploadDropzone } from "@/lib/uploadthing";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ArticleEditSchema, ArticleEditValues } from "./schema";
 import { editArticle } from "./actions";
@@ -171,9 +175,44 @@ export default function ArticleEditForm({
           name="image_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image URL</FormLabel>
+              <FormLabel>Bild</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <div className="space-y-3">
+                  {field.value ? (
+                    <div className="relative w-full h-56 rounded border overflow-hidden">
+                      <Image
+                        src={field.value}
+                        alt="Förhandsgranskning"
+                        fill
+                        className="object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        aria-label="Ta bort bild"
+                        onClick={() => field.onChange("")}
+                        className="absolute top-2 right-2 bg-background/90 hover:bg-background rounded-full p-1.5 shadow"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <UploadDropzone
+                      endpoint="articleImage"
+                      onClientUploadComplete={(res) => {
+                        const url = res?.[0]?.ufsUrl;
+                        if (url) {
+                          field.onChange(url);
+                          toast.success("Bild uppladdad!");
+                        }
+                      }}
+                      onUploadError={(error) => {
+                        toast.error(
+                          `Kunde inte ladda upp bild: ${error.message}`,
+                        );
+                      }}
+                    />
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -14,9 +14,13 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { ArticleCreateSchema, ArticleCreateValues } from "./schema";
 import { createArticle } from "./actions";
+import { generateNews } from "./ai";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { X } from "lucide-react";
+import { UploadDropzone } from "@/lib/uploadthing";
+import { deleteUploadedImage } from "@/lib/actions/uploadthing";
 import {
   BlockTypeSelect,
   BoldItalicUnderlineToggles,
@@ -41,7 +45,8 @@ export default function CreateArticleForm({
 }: {
   categories: { id: string; name: string }[];
 }) {
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [topic, setTopic] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
   const refSummary = useRef<MDXEditorMethods | null>(null);
   const refContent = useRef<MDXEditorMethods | null>(null);
   // initiera formulär med react-hook-form och zod-validator
@@ -58,6 +63,29 @@ export default function CreateArticleForm({
     },
   });
   const router = useRouter();
+
+  async function handleGenerate() {
+    if (!topic.trim()) {
+      toast.error("Ange ett ämne först");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const article = await generateNews(topic);
+      form.setValue("headline", article.headerLine, { shouldValidate: true });
+      form.setValue("summary", article.summary, { shouldValidate: true });
+      form.setValue("content", article.content, { shouldValidate: true });
+      refSummary.current?.setMarkdown(article.summary);
+      refContent.current?.setMarkdown(article.content);
+      toast.success("Artikel genererad! Granska och redigera vid behov.");
+    } catch (err) {
+      console.error("[AI Generate] Error:", err);
+      toast.error("Kunde inte generera artikel");
+    } finally {
+      setIsGenerating(false);
+    }
+  }
+
   // hantera formulärskick
   async function onSubmit(values: ArticleCreateValues) {
     try {
@@ -67,7 +95,6 @@ export default function CreateArticleForm({
       };
       toast.success(`Artikel skapad: ${res.headline}`);
       form.reset();
-      setImagePreview("");
       // navigera till artiklar admin-sidan
       router.push("/admin/artiklar");
     } catch (err) {
@@ -78,6 +105,26 @@ export default function CreateArticleForm({
   return (
     <Form {...form}>
       <div className="w-full max-w-full mx-auto px-4">
+        {/* AI-generering */}
+        <div className="space-y-3 bg-card p-6 md:p-8 rounded-xl shadow-lg border border-border mb-6">
+          <h2 className="text-lg font-semibold">Generera med AI (valfritt)</h2>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="Skriv ett ämne, t.ex. 'elpriser i Sverige'..."
+              disabled={isGenerating}
+            />
+            <Button
+              type="button"
+              onClick={handleGenerate}
+              disabled={isGenerating}
+            >
+              {isGenerating ? "Genererar..." : "Generera"}
+            </Button>
+          </div>
+        </div>
+
         <form
           onSubmit={form.handleSubmit(onSubmit, (er) => console.error(er))}
           className="w-full max-w-none space-y-8 bg-card p-8 md:p-10 rounded-xl shadow-lg border border-border"
@@ -189,36 +236,45 @@ export default function CreateArticleForm({
             name="image_url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-semibold">
-                  Bild (URL)
-                </FormLabel>
+                <FormLabel className="text-lg font-semibold">Bild</FormLabel>
                 <FormControl>
                   <div className="space-y-3">
-                    <Input
-                      type="url"
-                      placeholder="https://example.com/image.jpg"
-                      value={field.value ?? ""}
-                      onChange={(e) => {
-                        const url = e.target.value;
-                        field.onChange(url);
-                        setImagePreview(url);
-                      }}
-                      className="h-14 text-lg px-4"
-                    />
-                    {imagePreview ? (
+                    {field.value ? (
                       <div className="relative w-full h-56 rounded border overflow-hidden">
                         <Image
-                          src={imagePreview}
-                          alt="Preview"
+                          src={field.value}
+                          alt="Förhandsgranskning"
                           fill
                           className="object-cover rounded"
                         />
+                        <button
+                          type="button"
+                          aria-label="Ta bort bild"
+                          onClick={async () => {
+                            // Ingen artikel sparad än, så vi kan städa direkt.
+                            await deleteUploadedImage(field.value);
+                            field.onChange("");
+                          }}
+                          className="absolute top-2 right-2 bg-background/90 hover:bg-background rounded-full p-1.5 shadow"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
                       </div>
-                    ) : field.value ? (
-                      <p className="text-sm text-muted-foreground">
-                        Bild: {field.value}
-                      </p>
-                    ) : null}
+                    ) : (
+                      <UploadDropzone
+                        endpoint="articleImage"
+                        onClientUploadComplete={(res) => {
+                          const url = res?.[0]?.ufsUrl;
+                          if (url) {
+                            field.onChange(url);
+                            toast.success("Bild uppladdad!");
+                          }
+                        }}
+                        onUploadError={(error) => {
+                          toast.error(`Kunde inte ladda upp bild: ${error.message}`);
+                        }}
+                      />
+                    )}
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -254,7 +310,7 @@ export default function CreateArticleForm({
                 <FormControl>
                   <input
                     type="checkbox"
-                    checked={field.value}
+                    checked={field.value ?? false}
                     onChange={(e) => field.onChange(e.target.checked)}
                     className="w-5 h-5 rounded border-input cursor-pointer"
                   />

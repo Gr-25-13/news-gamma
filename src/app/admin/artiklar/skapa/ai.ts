@@ -3,8 +3,11 @@
 import { generateObject, generateText } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
+import { requireAdminOrEditor } from "@/lib/server-auth";
 
 export async function generateNews(topic: string) {
+  await requireAdminOrEditor();
+
   const { text } = await generateText({
     model: google("gemini-2.5-flash"),
     prompt: `Write an article about this topic: ${topic}`,

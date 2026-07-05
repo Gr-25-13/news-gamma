@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/server-auth";
 import { revalidatePath } from "next/cache";
 import { ROLES, type Role } from "@/lib/roles";
+import { deleteUploadedImage } from "@/lib/actions/uploadthing";
 
 function isValidRole(value: string): value is Role {
   return (ROLES as readonly string[]).includes(value);
@@ -83,7 +84,10 @@ export async function deleteArticle(articleId: string) {
       return { ok: false, error: "Invalid id" };
     }
 
-    await prisma.article.delete({ where: { id: articleId } });
+    const article = await prisma.article.delete({ where: { id: articleId } });
+
+    // Städa bort artikelns bild från UploadThing (best-effort, blockerar inte borttagningen)
+    await deleteUploadedImage(article.image_url);
 
     revalidatePath("/admin/artiklar");
     revalidatePath("/artiklar");

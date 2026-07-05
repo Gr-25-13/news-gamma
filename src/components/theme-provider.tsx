@@ -4,7 +4,7 @@ import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import CookieConsent from "./cookie-consent";
 
-import { setConsentCookie } from "@/app/admin/artiklar-ai/actions/cookieConsent";
+import { setConsentCookie } from "@/lib/actions/cookie-consent";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const handleAccept = async () => {
