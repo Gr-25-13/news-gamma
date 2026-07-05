@@ -100,17 +100,21 @@ Projektet demonstrerar moderna webbutvecklingstekniker med **server-first arkite
 - MDX-editor
 - Zod-validering
 
-### Johan – E-post & verifiering
+### Johan – Autentisering, e-post & Stripe-konfiguration
 
+- Inloggning och registrering (formulär och sidor)
 - E-postverifiering (Better Auth + Nodemailer)
-- Kontaktformulär och mallar
+- Kontaktformulär, mallar och server actions
+- Stripe-konfiguration i Better Auth
 - SMTP-konfiguration
 
-### Josefine – UX/UI & autentisering
+### Josefine – UX/UI, autentisering & funktioner
 
 - Design, logotyp, UX-flöden
 - Better Auth-integration
 - Rollhantering (Admin/Editor/User)
+- Väderfunktion och kommentarssystem
+- Prenumerationshantering (UI)
 - Sökfunktion och SEO-sluggar
 - Artikelrenderingskomponenter
 - Projektledning
@@ -445,9 +449,9 @@ För frågor, samarbeten eller support, kontakta utvecklarna:
 
 **Utvecklingsteam:**
 
-- **Josefine** – UX/UI, autentisering och projektledning
-- **Johan** – e-postfunktionalitet och verifiering
-- **Magui** – backend och betalningsintegration
+- **Josefine** – UX/UI, autentisering, funktioner och projektledning
+- **Johan** – autentisering, e-post, kontaktformulär och Stripe-konfiguration
+- **Magui** – backend, dashboard och betalningsintegration
 - **Ahmed** – AI-integration och externa API:er
 
 **Institution:** Lexicon i Linköping

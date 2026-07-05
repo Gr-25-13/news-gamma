@@ -115,7 +115,7 @@ export default function CommentsSection({ articleId }: CommentsSectionProps) {
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2 mb-2">
                     <span className="font-semibold text-foreground">
-                      {comment.user.name || comment.user.email}
+                      {comment.user.name}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {new Date(comment.createdAt).toLocaleDateString("sv-SE", {

@@ -1,16 +1,18 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { updateUserRole } from "@/lib/actions/admin";
+import { Role } from "@/generated/prisma";
 
 type Props = {
   id: string;
   initialRole: string;
 };
 
-const OPTIONS = ["ADMIN", "EDITOR", "SUBSCRIBER", "USER"] as const;
+const OPTIONS = Object.values(Role);
 
 export default function RoleSelect({ id, initialRole }: Props) {
-  const [role, setRole] = useState(initialRole);
+  const [role, setRole] = useState(initialRole.toLowerCase());
   const [loading, setLoading] = useState(false);
 
   async function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -20,16 +22,11 @@ export default function RoleSelect({ id, initialRole }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/admin/anvandare/${id}/role`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ role: newRole }),
-      });
+      const result = await updateUserRole(id, newRole);
 
-      if (!res.ok) {
-        const text = await res.text();
+      if (!result.ok) {
         setRole(prev);
-        toast.error("Kunde inte uppdatera roll: " + text);
+        toast.error("Kunde inte uppdatera roll: " + result.error);
       } else {
         toast.success(`Rollen uppdaterad till ${newRole}`);
       }
@@ -51,7 +48,7 @@ export default function RoleSelect({ id, initialRole }: Props) {
     >
       {OPTIONS.map((o) => (
         <option key={o} value={o}>
-          {o}
+          {o.charAt(0).toUpperCase() + o.slice(1)}
         </option>
       ))}
     </select>

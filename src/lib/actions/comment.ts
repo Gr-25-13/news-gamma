@@ -10,10 +10,28 @@ export type CommentWithUser = {
   createdAt: Date;
   user: {
     id: string;
-    name: string | null;
-    email: string;
+    name: string;
   };
 };
+
+type CommentRow = {
+  id: string;
+  content: string;
+  createdAt: Date;
+  user: { id: string; name: string | null; email: string };
+};
+
+function toCommentWithUser(comment: CommentRow): CommentWithUser {
+  return {
+    id: comment.id,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    user: {
+      id: comment.user.id,
+      name: comment.user.name || comment.user.email.split("@")[0],
+    },
+  };
+}
 
 export async function getComments(
   articleId: string,
@@ -25,7 +43,7 @@ export async function getComments(
       include: { user: { select: { id: true, name: true, email: true } } },
     });
 
-    return comments;
+    return comments.map(toCommentWithUser);
   } catch (err) {
     console.error("Failed to fetch comments:", err);
     return [];
@@ -63,7 +81,7 @@ export async function createComment(
       include: { user: { select: { id: true, name: true, email: true } } },
     });
 
-    return { success: true, comment: created };
+    return { success: true, comment: toCommentWithUser(created) };
   } catch (err) {
     console.error("Failed to create comment:", err);
     return { success: false, error: "Kunde inte skapa kommentar" };

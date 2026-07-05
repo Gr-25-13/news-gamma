@@ -1,13 +1,19 @@
 "use server";
 
+import { Prisma, Role } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/server-auth";
 import { revalidatePath } from "next/cache";
 
-type Role = "admin" | "editor" | "subscriber" | "user";
-
 function isValidRole(value: string): value is Role {
-  return ["admin", "editor", "subscriber", "user"].includes(value);
+  return (Object.values(Role) as string[]).includes(value);
+}
+
+function isForeignKeyViolation(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2003"
+  );
 }
 
 /**
@@ -54,7 +60,14 @@ export async function deleteUser(userId: string) {
     return { ok: true };
   } catch (error) {
     console.error("Failed to delete user", error);
-    return { ok: false, error: String(error) };
+    if (isForeignKeyViolation(error)) {
+      return {
+        ok: false,
+        error:
+          "Kan inte ta bort användaren eftersom den har skrivit artiklar. Ta bort eller omfördela artiklarna först.",
+      };
+    }
+    return { ok: false, error: "Kunde inte ta bort användaren" };
   }
 }
 
@@ -76,7 +89,7 @@ export async function deleteArticle(articleId: string) {
     return { ok: true };
   } catch (error) {
     console.error("Failed to delete article", error);
-    return { ok: false, error: String(error) };
+    return { ok: false, error: "Kunde inte ta bort artikeln" };
   }
 }
 
@@ -98,6 +111,13 @@ export async function deleteCategory(categoryId: string) {
     return { ok: true };
   } catch (error) {
     console.error("Failed to delete category", error);
-    return { ok: false, error: String(error) };
+    if (isForeignKeyViolation(error)) {
+      return {
+        ok: false,
+        error:
+          "Kan inte ta bort kategorin eftersom den har artiklar kopplade till sig. Flytta eller ta bort artiklarna först.",
+      };
+    }
+    return { ok: false, error: "Kunde inte ta bort kategorin" };
   }
 }
