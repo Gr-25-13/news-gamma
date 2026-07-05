@@ -159,10 +159,7 @@ export function Navbar(): React.ReactElement {
             <nav className="hidden md:flex items-center gap-2">
               <Link
                 href="/"
-                className={cn(
-                  navLinkBase,
-                  pathname === "/" && "bg-white/10",
-                )}
+                className={cn(navLinkBase, pathname === "/" && "bg-white/10")}
               >
                 Startsida
               </Link>

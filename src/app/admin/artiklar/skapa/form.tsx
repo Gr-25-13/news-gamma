@@ -271,7 +271,9 @@ export default function CreateArticleForm({
                           }
                         }}
                         onUploadError={(error) => {
-                          toast.error(`Kunde inte ladda upp bild: ${error.message}`);
+                          toast.error(
+                            `Kunde inte ladda upp bild: ${error.message}`,
+                          );
                         }}
                       />
                     )}

@@ -74,6 +74,7 @@ Projektet demonstrerar moderna webbutvecklingstekniker med **server-first arkite
 - **Better Auth Stripe-plugin**
 - **AI SDK (Vercel)**, **Google AI SDK (Gemini)**
 - **MDXEditor**
+- **UploadThing** – bilduppladdning för artiklar
 
 ### Externa API:er
 
@@ -183,6 +184,9 @@ CONTACT_TO="contact@example.com"
 
 # Google AI (Gemini)
 GOOGLE_GENERATIVE_AI_API_KEY="your-api-key"
+
+# UploadThing (bilduppladdning)
+UPLOADTHING_TOKEN="your-uploadthing-token"
 ```
 
 **Obs:** För produktion, använd plattformens säkra environment variable storage.
@@ -218,12 +222,12 @@ news-gamma/
 │   └── schema.prisma          # Databasmodeller
 ├── src/
 │   ├── app/                   # Next.js App Router
-│   │   ├── admin/             # Admin-panel
-│   │   │   ├── artiklar/      # Artikelhantering (CRUD)
-│   │   │   ├── artiklar-ai/   # AI-artikelgenerering
+│   │   ├── admin/             # Admin-panel (startsida = dashboard)
+│   │   │   ├── artiklar/      # Artikelhantering (CRUD + AI-generering)
 │   │   │   ├── anvandare/     # Användarhantering
-│   │   │   ├── kategorier/    # Kategorihantering
-│   │   │   └── dashboard/     # Statistik och visualisering
+│   │   │   └── kategorier/    # Kategorihantering
+│   │   ├── api/
+│   │   │   └── uploadthing/   # Filuppladdnings-endpoint
 │   │   ├── artiklar/          # Artikelvisning
 │   │   │   └── [slug]/        # Dynamisk artikelsida
 │   │   ├── el/                # Elprisinformation
@@ -257,6 +261,9 @@ news-gamma/
 - `src/lib/client/auth-client.ts` – Better Auth-client för React
 - `src/lib/server-auth.ts` – Server-side auth middleware
 - `src/lib/actions/` – Server Actions för backend-logik
+- `src/lib/roles.ts` – enda källan för giltiga användarroller (klient- och serversäker)
+- `src/lib/rate-limit.ts` – rate limiting för server actions utanför Better Auth
+- `src/app/api/uploadthing/core.ts` – filuppladdningsregler (max 4MB, admin/editor-only)
 
 ---
 
@@ -274,11 +281,13 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 
 - `admin.ts` – administratörsoperationer
 - `category.ts` – kategorihantering
-- `comment.ts` – kommentarsfunktionalitet
-- `contact-actions.ts` – kontaktformulär
+- `comment.ts` – kommentarsfunktionalitet (med rate limiting)
+- `contact-actions.ts` – kontaktformulär (med rate limiting)
+- `cookie-consent.ts` – GDPR-cookiebanner
 - `email-actions.ts` – e-postverifiering
 - `mail.ts` – e-postutskick med Nodemailer
 - `profile.ts` – användarprofilhantering
+- `uploadthing.ts` – städar bort borttagna/utbytta bilder från UploadThing
 - `weather.ts` – väderdata
 - `weather-location.ts` – lokaliseringsfunktioner
 
@@ -289,6 +298,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 - Rollbaserad åtkomstkontroll (Admin, Editor, User)
 - Sessionshantering med säker token-lagring
 - Server-side middleware för skyddade routes
+- Databaslagrad rate limiting på inloggning (Better Auth) och känsliga server actions
 
 ### Databasmodeller (Prisma)
 
@@ -300,6 +310,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 - Order & OrderItem
 - Session & Account
 - PasswordResetToken
+- RateLimit & ActionRateLimit (rate limiting)
 ```
 
 ---
@@ -323,15 +334,17 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
   <img src="./public/screenshot-adminartiklar.png" alt="Admin artiklar - screenshot" style="max-width:100%;height:auto;border-radius:6px;" />
 </p>
 
-- Skapa, redigera och ta bort artiklar
-- AI-assisterad artikelgenerering med Gemini
+- Skapa, redigera och ta bort artiklar – med valfri AI-assisterad generering
+  (Gemini) direkt i samma formulär
+- Bilduppladdning via UploadThing (max 4MB), med automatisk städning av
+  gamla filer vid byte/borttagning
 - MDX-editor för rich text-innehåll
 - Kategorihantering med navbar-visning
 - Användarhantering med rollfördelning
-- Statistik och dashboard med visualiseringar
+- Dashboard (startsidan i admin) med statistik och visualiseringar
 - Editor's Choice-markering
 - Premium content-flaggning
-- Användarhantering
+- Genomgående adminmeny som blir en utdragsmeny (Sheet) på mobil
 
 ### Innehållspresentation
 
@@ -350,6 +363,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 
 - **Stripe** – prenumerationer och betalningar
 - **Gemini AI** – innehållsgenerering med Google Search
+- **UploadThing** – bilduppladdning och -lagring
 - **Spotprices API** – elpriser för svenska elområden
 - **SMHI** – väderdata för Sverige
 - **Nodemailer** – e-postkommunikation
@@ -427,6 +441,12 @@ npx prisma generate
 - Kontrollera att `GOOGLE_GENERATIVE_AI_API_KEY` är korrekt
 - Verifiera API-nyckelns behörigheter och kvoter
 - Kontrollera nätverksanslutningen till Google AI API
+
+**Bilduppladdning fungerar inte**
+
+- Kontrollera att `UPLOADTHING_TOKEN` är korrekt angiven i `.env`
+- Verifiera att filen inte överskrider gränsen på 4MB
+- Endast admin/editor kan ladda upp bilder – kontrollera inloggad roll
 
 **Build-fel**
 

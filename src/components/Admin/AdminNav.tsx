@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { LayoutDashboard, Newspaper, FolderOpen, Users, Menu } from "lucide-react";
+import {
+  LayoutDashboard,
+  Newspaper,
+  FolderOpen,
+  Users,
+  Menu,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/client/auth-client";
 import type { AdminUser } from "@/lib/schema/zod-schemas";
@@ -26,7 +32,12 @@ const LINKS: AdminLink[] = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/artiklar", label: "Artiklar", icon: Newspaper },
   { href: "/admin/kategorier", label: "Kategorier", icon: FolderOpen },
-  { href: "/admin/anvandare", label: "Användare", icon: Users, adminOnly: true },
+  {
+    href: "/admin/anvandare",
+    label: "Användare",
+    icon: Users,
+    adminOnly: true,
+  },
 ];
 
 function isLinkActive(pathname: string | null, href: string) {
