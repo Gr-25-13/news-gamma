@@ -69,7 +69,7 @@ export default function CreateArticle({
               />
             </div>
             <Button
-              className="ml-2 px-4 py-2 rounded bg-primary text-primary-foreground hover:opacity-95"
+              className="ml-2"
               onClick={async () => {
                 const article = await generateNews(topic);
                 setHeadLine(article.headerLine);
@@ -260,7 +260,6 @@ export default function CreateArticle({
           </div>
           <div className="mt-6">
             <Button
-              className="bg-primary text-primary-foreground"
               onClick={async () => {
                 // Don't wrap in try-catch - redirect() throws NEXT_REDIRECT which is normal behavior
                 await saveArticle({

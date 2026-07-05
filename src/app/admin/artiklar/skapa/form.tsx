@@ -302,9 +302,7 @@ export default function CreateArticleForm({
             )}
           />
           <div className="flex justify-end pt-4 border-t border-border">
-            <Button type="submit" className="h-14 px-8 text-lg font-semibold">
-              Skapa artikel
-            </Button>
+            <Button type="submit">Skapa artikel</Button>
           </div>
         </form>
       </div>

@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import LinkButton from "@/components/Buttons/LinkButton";
 import SearchForm from "@/components/Forms/SearchForm";
 import { requireAdminOrEditor } from "@/lib/server-auth";
+import AdminNav from "@/components/Admin/AdminNav";
 
 export default async function AdminRedigeraArtikelPage({
   searchParams,
@@ -21,6 +22,7 @@ export default async function AdminRedigeraArtikelPage({
   return (
     <>
       <Navbar />
+      <AdminNav />
       <main className="flex grow pt-8 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold mb-6">Redigera artikel</h1>

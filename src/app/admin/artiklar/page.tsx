@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import SearchForm from "@/components/Forms/SearchForm";
 import { requireAdminOrEditor } from "@/lib/server-auth";
 import DeleteButton from "../artiklar/ta-bort/delete-button";
+import AdminNav from "@/components/Admin/AdminNav";
 
 // Next 15: searchParams is async in Server Components. Accept as Promise and await it.
 export default async function AdminArtiklarPage({
@@ -30,6 +31,7 @@ export default async function AdminArtiklarPage({
   return (
     <>
       <Navbar />
+      <AdminNav />
       <main className="flex grow pt-8 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold mb-6">Admin: Artiklar</h1>

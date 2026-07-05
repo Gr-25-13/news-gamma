@@ -1,4 +1,3 @@
-import LinkButton from "@/components/Buttons/LinkButton";
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -6,6 +5,7 @@ import SearchForm from "@/components/Forms/SearchForm";
 import { requireAdmin } from "@/lib/server-auth";
 import DeleteButton from "./ta-bort/delete-button";
 import RoleSelect from "@/components/Admin/RoleSelect";
+import AdminNav from "@/components/Admin/AdminNav";
 
 export default async function AdminAnvandarePage({
   searchParams,
@@ -30,6 +30,7 @@ export default async function AdminAnvandarePage({
   return (
     <>
       <Navbar />
+      <AdminNav />
       <main className="flex grow pt-8 pb-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-bold mb-6">Admin: Användare</h1>
@@ -39,12 +40,6 @@ export default async function AdminAnvandarePage({
               placeholder="Sök användare (namn eller e-post)..."
               className="flex gap-2"
             />
-            <div className="ml-auto flex gap-2">
-              {/* Optionellt: länk till skapa användare om du vill implementera det */}
-              <LinkButton href="/admin/anvandare/skapa" variant="primary">
-                Skapa
-              </LinkButton>
-            </div>
           </div>
 
           <ul className="space-y-4">
@@ -57,12 +52,6 @@ export default async function AdminAnvandarePage({
                   </div>
                 </div>
                 <div className="flex gap-2 items-center">
-                  <LinkButton
-                    href={`/admin/anvandare/redigera/${u.id}`}
-                    variant="primary"
-                  >
-                    Redigera
-                  </LinkButton>
                   {/* Dropdown för att ändra roll */}
                   <RoleSelect id={u.id} initialRole={u.role ?? "USER"} />
 
