@@ -24,6 +24,8 @@ export default function ThemeLogo({
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // Standard next-themes hydration guard; must run after mount, not derivable from render.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   // Eftersom SSR renderar utan tema, använd standardlogotypen

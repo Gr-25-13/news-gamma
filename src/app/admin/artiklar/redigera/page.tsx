@@ -3,7 +3,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import LinkButton from "@/components/Buttons/LinkButton";
 import SearchForm from "@/components/Forms/SearchForm";
-import type { Article, Category } from "@/generated/prisma";
 import { requireAdminOrEditor } from "@/lib/server-auth";
 
 export default async function AdminRedigeraArtikelPage({

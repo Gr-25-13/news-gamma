@@ -65,6 +65,8 @@ export default function ClientGeoWeather() {
 
   useEffect(() => {
     if (!navigator?.geolocation) {
+      // navigator is only available client-side; capability check can't happen during render.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError("Geolocation stöds inte i din webbläsare.");
       setStatus("error");
       return;

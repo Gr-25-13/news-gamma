@@ -1,7 +1,6 @@
 "use server";
 // filepath: src/lib/actions/email-actions.ts
 
-import { auth } from "@/lib/auth";
 import { sendEmail } from "@/lib/actions/mail";
 import { prisma } from "@/lib/prisma";
 

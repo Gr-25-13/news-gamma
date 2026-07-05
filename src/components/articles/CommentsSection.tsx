@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSession } from "@/lib/client/auth-client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,12 +22,7 @@ export default function CommentsSection({ articleId }: CommentsSectionProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [articleId]);
-
-  async function load() {
+  const load = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await getComments(articleId);
@@ -38,7 +33,13 @@ export default function CommentsSection({ articleId }: CommentsSectionProps) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [articleId]);
+
+  useEffect(() => {
+    // Fetch comments on mount and whenever articleId changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    load();
+  }, [load]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

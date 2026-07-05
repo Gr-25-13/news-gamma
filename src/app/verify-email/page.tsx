@@ -1,7 +1,6 @@
 "use client";
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authClient } from "@/lib/client/auth-client";
 import { toast } from "sonner";
 
 export default function VerifyEmailPage() {

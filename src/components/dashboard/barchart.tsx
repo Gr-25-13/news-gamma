@@ -1,5 +1,5 @@
 "use client";
-import { CandlestickChart, User } from "lucide-react";
+import { User } from "lucide-react";
 import {
   BarChart as BarGraph,
   ResponsiveContainer,

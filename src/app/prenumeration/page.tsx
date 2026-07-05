@@ -33,9 +33,14 @@ export default function PrenumerationLanding(): React.ReactElement {
   async function goToCheckout(planId: string) {
     // If user is signed in, start Stripe Checkout via authClient
     if (session?.user) {
+      const plan = PLANS.find((p) => p.id === planId);
+      if (!plan) {
+        console.error(`Unknown plan id: ${planId}`);
+        return;
+      }
       try {
         await authClient.subscription.upgrade({
-          plan: "Premium",
+          plan: plan.name,
           // use absolute URLs to be safe
           successUrl: window.location.origin + "/",
           cancelUrl: window.location.origin + "/",

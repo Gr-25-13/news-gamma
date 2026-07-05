@@ -136,17 +136,6 @@ export default async function Dashboard() {
 
   console.log("monthlyRevenueData", monthlyRevenueData);
 
-  //Fetch recent sales
-  const recentSales = await prisma.order.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 7,
-    include: {
-      user: true,
-    },
-  });
-
   const goalAmount = 5000;
   const goalProgress = (premiumProfit / goalAmount) * 100;
 

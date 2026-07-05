@@ -10,7 +10,7 @@ export async function editArticle(values: ArticleEditValues) {
 
   const categoryId = data.categoryIds?.[0];
   // Uppdatera artikeln med de nya värdena
-  const updated = await prisma.article.update({
+  await prisma.article.update({
     where: { id: data.id },
     data: {
       headline: data.headline,

@@ -20,20 +20,16 @@ type Props = {
 };
 
 export function EditorChoiceCarousel({ articles }: Props) {
-  const plugin = React.useRef(
+  const [plugin] = React.useState(() =>
     Autoplay({ delay: 2700, stopOnInteraction: false }),
   );
 
   const handleMouseEnter = () => {
-    if (plugin.current) {
-      plugin.current.stop();
-    }
+    plugin.stop();
   };
 
   const handleMouseLeave = () => {
-    if (plugin.current) {
-      plugin.current.play();
-    }
+    plugin.play();
   };
 
   return (
@@ -47,7 +43,7 @@ export function EditorChoiceCarousel({ articles }: Props) {
           align: "start",
           loop: true,
         }}
-        plugins={[plugin.current]}
+        plugins={[plugin]}
         className="w-full"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
