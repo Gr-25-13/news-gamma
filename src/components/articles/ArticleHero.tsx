@@ -48,7 +48,7 @@ export function ArticleHero({ article, className = "" }: Props) {
             {article.category}
           </p>
           <Link href={`/artiklar/${article.slug}`} className="mt-2 block">
-            <h3 className="text-3xl font-extrabold text-primary leading-tight hover:text-foreground cursor-pointer">
+            <h3 className="text-xl md:text-3xl font-extrabold text-primary leading-tight hover:text-foreground cursor-pointer">
               {article.title}
             </h3>
           </Link>

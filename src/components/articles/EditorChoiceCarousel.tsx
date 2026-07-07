@@ -82,7 +82,7 @@ export function EditorChoiceCarousel({ articles }: Props) {
                     href={`/artiklar/${article.slug}`}
                     className="mt-2 block"
                   >
-                    <h3 className="text-3xl font-extrabold text-primary leading-tight hover:text-primary cursor-pointer">
+                    <h3 className="text-xl md:text-3xl font-extrabold text-primary leading-tight hover:text-primary cursor-pointer">
                       {article.title}
                     </h3>
                   </Link>
