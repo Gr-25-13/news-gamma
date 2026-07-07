@@ -1,7 +1,7 @@
 # Dagens Dos
 
 <p align="center">
-  <img src="./public/mockup-dagensdos.jpg" alt="Mockup - Dagens Dos" width="700">
+  <img src="./public/mockup-dagens-dos.png" alt="Mockup - Dagens Dos" width="700">
 </p>
 
 En modern nyhetsapplikation byggd med **Next.js (App Router)** och **TypeScript**.
@@ -45,8 +45,8 @@ Projektet demonstrerar moderna webbutvecklingstekniker med **server-first arkite
 - Extern API-integration (elpriser, väderdata)
 
 <p align="center">
-  <img src="./public/screenshot-dark.png" alt="Dark mode" width="48%">
-  <img src="./public/screenshot-light.png" alt="Light mode" width="48%">
+  <img src="./public/screenshoot-mobil.png" alt="Mobil" width="48%">
+  <img src="./public/screenshoot-mobilmeny.png" alt="Mobilmeny" width="48%">
 </p>
 
 ---
@@ -332,7 +332,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 ### Admin-/editorfunktioner
 
 <p align="center">
-  <img src="./public/screenshot-adminartiklar.png" alt="Admin artiklar - screenshot" style="max-width:100%;height:auto;border-radius:6px;" />
+  <img src="./public/screenshoot-adminartiklar.png" alt="Admin artiklar - screenshot" style="max-width:100%;height:auto;border-radius:6px;" />
 </p>
 
 - Skapa, redigera och ta bort artiklar – med valfri AI-assisterad generering
@@ -350,7 +350,7 @@ Projektet använder genomgående **Server Actions** för all backend-logik:
 ### Innehållspresentation
 
 <p align="center">
-  <img src="./public/screenshot-slug.png" alt="Artikelvy / slug - exempel" style="max-width:100%;height:auto;border-radius:6px;" />
+  <img src="./public/screenshoot-artikel.png" alt="Artikelvy / Artikel - exempel" style="max-width:100%;height:auto;border-radius:6px;" />
 </p>
 
 - Responsiva artikelkort
