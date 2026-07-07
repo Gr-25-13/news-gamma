@@ -16,8 +16,8 @@ const merriweather = Merriweather({
 });
 
 export const metadata: Metadata = {
-  title: "Nyhetspulsen",
-  description: "Alltid i takt med tiden",
+  title: "Dagens Dos",
+  description: "Vår mission är att leverera nyheter så att du kan känna dig minimalt informerad.",
 };
 
 export default function RootLayout({
