@@ -21,7 +21,7 @@ type Props = {
 
 export function EditorChoiceCarousel({ articles }: Props) {
   const [plugin] = React.useState(() =>
-    Autoplay({ delay: 2700, stopOnInteraction: false }),
+    Autoplay({ delay: 3400, stopOnInteraction: false }),
   );
   // Autoplay's own init() bails out (and never sets up its internal timer state)
   // when there's only one slide, so calling play()/stop() in that case throws.
